@@ -1,0 +1,136 @@
+#about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-left {
+  padding: 5.5rem 3rem;
+  border-right: 1px solid var(--border);
+}
+
+.about-title {
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 2rem;
+}
+
+.about-title em {
+  font-style: normal;
+  color: var(--yellow);
+}
+
+.about-body {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 500px;
+  white-space: pre-wrap;
+}
+
+.about-right {
+  padding: 5.5rem 3rem;
+}
+
+.exp-item {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.exp-item:first-of-type {
+  border-top: 1px solid var(--border);
+}
+
+.exp-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  padding-top: 3px;
+  letter-spacing: 1px;
+}
+
+.exp-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.exp-role {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--yellow);
+  letter-spacing: 1.5px;
+}
+
+@media (max-width: 768px) {
+  #about {
+    grid-template-columns: 1fr;
+  }
+
+  .about-left {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 3.5rem 1.5rem;
+  }
+
+  .about-right {
+    padding: 3.5rem 1.5rem;
+  }
+
+  .about-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-body {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 480px) {
+  #about {
+    padding: 2rem 0;
+  }
+
+  .about-left,
+  .about-right {
+    padding: 2.5rem 1rem;
+  }
+
+  .about-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .about-body {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .exp-item {
+    padding: 1rem 0;
+    gap: 1rem;
+    grid-template-columns: 80px 1fr;
+  }
+
+  .exp-year {
+    font-size: 10px;
+  }
+
+  .exp-name {
+    font-size: 13px;
+  }
+
+  .exp-role {
+    font-size: 10px;
+  }
+}
