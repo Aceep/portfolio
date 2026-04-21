@@ -99,6 +99,16 @@ export const PROJECTS: Project[] = [
     link: 'https://annabeth-library.vercel.app/',
     category: 'personal',
   },
+  {
+    id: 'mes-collections',
+    number: '002',
+    name: 'Mes\nCollections',
+    description:
+      'Collection tracking app with account login and a clean dashboard to organize personal libraries.',
+    tags: ['React', 'Authentication', 'Dashboard'],
+    link: 'https://bab-nu.vercel.app/',
+    category: 'personal',
+  },
 
   // School Projects
   {
