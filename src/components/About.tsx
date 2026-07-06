@@ -7,6 +7,8 @@ interface AboutProps {
   title: string;
   description: string;
   experience: Experience[];
+  label: string;
+  journeyLabel: string;
 }
 
 /**
@@ -16,17 +18,19 @@ export const About: React.FC<AboutProps> = ({
   title,
   description,
   experience,
+  label,
+  journeyLabel,
 }) => {
   return (
     <section id="about">
       <div className="about-left">
-        <SectionLabel>01 — About</SectionLabel>
+        <SectionLabel>{label}</SectionLabel>
         <h2 className="about-title" dangerouslySetInnerHTML={{ __html: title }} />
         <p className="about-body">{description}</p>
       </div>
 
       <div className="about-right">
-        <SectionLabel>Experience</SectionLabel>
+        <SectionLabel>{journeyLabel}</SectionLabel>
         {experience.map((exp) => (
           <div key={exp.id} className="exp-item">
             <div className="exp-year">{exp.year}</div>

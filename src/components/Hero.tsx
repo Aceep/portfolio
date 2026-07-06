@@ -1,21 +1,19 @@
 import React from 'react';
 import { Button } from './Button';
+import type { PortfolioContent, UIStrings } from '../types';
 import '../styles/components/Hero.css';
 
 interface HeroProps {
-  tagline: string;
-  name: string;
-  yearsExp: string;
+  portfolio: PortfolioContent;
+  ui: UIStrings;
 }
 
 /**
  * Hero section - Large striking landing area with CTA buttons
  */
-export const Hero: React.FC<HeroProps> = ({
-  tagline,
-  name,
-  yearsExp,
-}) => {
+export const Hero: React.FC<HeroProps> = ({ portfolio, ui }) => {
+  const { name, tagline, heroJobTitle, heroValue, yearsExp, alternanceBanner, alternanceDetail } =
+    portfolio;
   const [firstName, ...lastNameParts] = name.toUpperCase().split(' ');
   const lastName = lastNameParts.join(' ');
 
@@ -27,17 +25,25 @@ export const Hero: React.FC<HeroProps> = ({
         <h1 className="hero-name">
           <span className="solid">{firstName}</span>
           <span className="outline">{lastName}</span>
-          <span className="job-title solid">FRONT-END</span>
+          <span className="job-title solid">{heroJobTitle}</span>
         </h1>
 
-        <p className="hero-value">Building cinematic, high-performance interfaces.</p>
+        <p className="hero-value">{heroValue}</p>
+
+        <div className="hero-alternance" role="note">
+          <span className="hero-alternance-dot" aria-hidden="true" />
+          <span className="hero-alternance-text">
+            <strong>{alternanceBanner}</strong>
+            <span className="hero-alternance-detail">{alternanceDetail}</span>
+          </span>
+        </div>
 
         <div className="hero-ctas">
           <Button variant="primary" href="#projects">
-            View Featured Work ↗
+            {ui.heroCtaWork}
           </Button>
           <Button variant="secondary" href="/GAUTIER_Alycia_CV.pdf" download="GAUTIER_Alycia_CV.pdf">
-            Download CV
+            {ui.heroCtaCv}
           </Button>
         </div>
 
@@ -66,9 +72,7 @@ export const Hero: React.FC<HeroProps> = ({
               fill="#444"
               letterSpacing="3"
             >
-              <textPath href="#circle-text">
-                CREATIVE DEV · OPEN TO WORK ·{' '}
-              </textPath>
+              <textPath href="#circle-text">{ui.heroBadge}</textPath>
             </text>
           </svg>
         </div>

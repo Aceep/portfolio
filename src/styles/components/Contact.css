@@ -63,11 +63,25 @@
   transform: translate(4px, -4px);
 }
 
+.cl-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .cl-label {
   font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
+}
+
+.cl-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  text-transform: none;
 }
 
 .cl-arrow {

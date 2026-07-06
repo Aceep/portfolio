@@ -1,29 +1,27 @@
 import React from 'react';
 import { SectionLabel } from './SectionLabel';
 import { VideoCarousel } from './VideoCarousel';
-import type { Video } from '../types';
+import type { Video, UIStrings } from '../types';
 import '../styles/components/Videos.css';
 
 interface VideosProps {
   videos: Video[];
+  ui: UIStrings;
 }
 
 /**
- * Videos section - Adobe Premiere portfolio
+ * Videos section - creative side (short-film editing)
  */
-export const Videos: React.FC<VideosProps> = ({ videos }) => {
+export const Videos: React.FC<VideosProps> = ({ videos, ui }) => {
   return (
     <section id="videos">
       <div className="videos-container">
-        <SectionLabel>06 — Videos</SectionLabel>
+        <SectionLabel>{ui.videosLabel}</SectionLabel>
 
         <div className="videos-content">
           <div className="videos-header">
-            <h2>Selected Video Work</h2>
-            <p>
-              A selection of edits focused on rhythm, framing, and emotion. Each piece explores
-              pacing, narrative continuity, and visual tone.
-            </p>
+            <h2>{ui.videosHeading}</h2>
+            <p>{ui.videosSubtitle}</p>
           </div>
 
           <VideoCarousel videos={videos} />

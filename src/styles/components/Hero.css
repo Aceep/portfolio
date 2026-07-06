@@ -372,3 +372,62 @@
     opacity: 0.18;
   }
 }
+
+/* Alternance banner — prominent apprenticeship call-out */
+.hero-alternance {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0.4rem 0 1.6rem;
+  padding: 0.85rem 1.15rem;
+  border: 1px solid var(--yellow);
+  border-radius: 4px;
+  background: rgba(224, 177, 77, 0.08);
+  max-width: 560px;
+}
+
+.hero-alternance-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ae54a;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.hero-alternance-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hero-alternance-text strong {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.hero-alternance-detail {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+@media (max-width: 480px) {
+  .hero-alternance {
+    padding: 0.7rem 0.9rem;
+    gap: 10px;
+  }
+
+  .hero-alternance-text strong {
+    font-size: 11px;
+  }
+
+  .hero-alternance-detail {
+    font-size: 10px;
+  }
+}

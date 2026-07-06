@@ -3,7 +3,7 @@ import {
   Cursor,
   Navigation,
   Hero,
-  FeaturedReel,
+  Focus,
   Marquee,
   About,
   Skills,
@@ -12,21 +12,16 @@ import {
   Contact,
   Footer,
 } from './components';
-import {
-  PORTFOLIO_CONTENT,
-  SKILLS,
-  EXPERIENCE,
-  PROJECTS,
-  VIDEOS,
-  CONTACT_LINKS,
-  MARQUEE_ITEMS,
-} from './constants/content';
+import { useLanguage } from './i18n/LanguageContext';
 import './styles/App.css';
 
 /**
  * Main App component - Orchestrates all page sections
  */
 function App() {
+  const { c } = useLanguage();
+  const { portfolio, skills, experience, projects, videos, contactLinks, focusPillars, marquee, ui } = c;
+
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll('section'));
 
@@ -61,35 +56,34 @@ function App() {
       <Cursor />
       <Navigation />
 
-      <Hero
-        tagline={PORTFOLIO_CONTENT.tagline}
-        name={PORTFOLIO_CONTENT.name}
-        yearsExp={PORTFOLIO_CONTENT.yearsExp}
-      />
+      <Hero portfolio={portfolio} ui={ui} />
 
-      <Marquee items={MARQUEE_ITEMS} />
+      <Marquee items={marquee} />
 
-      <FeaturedReel projects={PROJECTS} />
+      <Focus pillars={focusPillars} label={ui.focusLabel} />
 
       <About
-        title={PORTFOLIO_CONTENT.aboutTitle}
-        description={PORTFOLIO_CONTENT.aboutDescription}
-        experience={EXPERIENCE}
+        title={portfolio.aboutTitle}
+        description={portfolio.aboutDescription}
+        experience={experience}
+        label={ui.aboutLabel}
+        journeyLabel={ui.aboutJourneyLabel}
       />
 
-      <Skills skills={SKILLS} />
+      <Skills skills={skills} ui={ui} />
 
-      <Projects projects={PROJECTS} title="Selected Work" sectionNumber="03" />
+      <Projects projects={projects} ui={ui} />
 
-      <Videos videos={VIDEOS} />
+      <Videos videos={videos} ui={ui} />
 
       <Contact
-        title="Let's<br><em>work</em><br>together."
-        description={PORTFOLIO_CONTENT.contactAvailability}
-        contactLinks={CONTACT_LINKS}
+        title={ui.contactTitle}
+        description={portfolio.contactAvailability}
+        contactLinks={contactLinks}
+        label={ui.contactLabel}
       />
 
-      <Footer copyright={`© 2025 — ${PORTFOLIO_CONTENT.name} — Front-End Developer`} />
+      <Footer copyright={`© 2025 — ${portfolio.name} — ${ui.footerRole}`} />
     </>
   );
 }

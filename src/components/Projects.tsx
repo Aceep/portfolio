@@ -3,26 +3,21 @@ import { SectionLabel } from './SectionLabel';
 import { Tag } from './Tag';
 import { ProjectGallery } from './ProjectGallery';
 import { ProjectModal } from './ProjectModal';
-import type { Project } from '../types';
+import type { Project, UIStrings } from '../types';
 import '../styles/components/Projects.css';
 
 type FilterKey = 'all' | 'personal' | 'school' | 'professional';
 
 interface ProjectsProps {
   projects: Project[];
-  title?: string;
-  sectionNumber?: string;
+  ui: UIStrings;
 }
 
 /**
  * Projects grid showcasing portfolio work
  * Can be filtered by category (personal, school, professional)
  */
-export const Projects: React.FC<ProjectsProps> = ({
-  projects,
-  title,
-  sectionNumber,
-}) => {
+export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [selectedModalProject, setSelectedModalProject] = useState<string | null>(null);
   const filterButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -32,34 +27,22 @@ export const Projects: React.FC<ProjectsProps> = ({
     : projects.filter((p) => p.category === activeFilter);
 
   const filterOptions: Array<{ key: FilterKey; label: string; count: number }> = [
-    { key: 'all', label: 'All', count: projects.length },
-    { key: 'professional', label: 'Professional', count: projects.filter((p) => p.category === 'professional').length },
-    { key: 'personal', label: 'Personal', count: projects.filter((p) => p.category === 'personal').length },
-    { key: 'school', label: 'Technical', count: projects.filter((p) => p.category === 'school').length },
+    { key: 'all', label: ui.filterAll, count: projects.length },
+    { key: 'professional', label: ui.filterProfessional, count: projects.filter((p) => p.category === 'professional').length },
+    { key: 'personal', label: ui.filterPersonal, count: projects.filter((p) => p.category === 'personal').length },
+    { key: 'school', label: ui.filterTechnical, count: projects.filter((p) => p.category === 'school').length },
   ];
-
-  const getCategoryTitle = (): string => {
-    if (title) return title;
-
-    return 'Selected Work';
-  };
-
-  const getSectionNumber = (): string => {
-    if (sectionNumber) return sectionNumber;
-
-    return '03';
-  };
 
   const getCategoryLabel = (category?: Project['category']) => {
     switch (category) {
       case 'professional':
-        return 'Studio';
+        return ui.categoryStudio;
       case 'personal':
-        return 'Personal';
+        return ui.categoryPersonal;
       case 'school':
-        return 'Lab';
+        return ui.categoryLab;
       default:
-        return 'Feature';
+        return ui.categoryFeature;
     }
   };
 
@@ -103,17 +86,15 @@ export const Projects: React.FC<ProjectsProps> = ({
     <>
       <section id="projects" className="projects-section">
         <SectionLabel>
-          {getSectionNumber()} — {getCategoryTitle()}
+          03 — {ui.projectsTitle}
         </SectionLabel>
 
         <div className="projects-header">
-          <p className="projects-kicker">Curated selection</p>
+          <p className="projects-kicker">{ui.projectsKicker}</p>
           <div className="projects-summary-row">
-            <p className="projects-summary">
-              A mix of product builds, visual experiments, and technical explorations.
-            </p>
+            <p className="projects-summary">{ui.projectsSummary}</p>
             <p className="projects-live-count" aria-live="polite">
-              {filteredProjects.length} project{filteredProjects.length > 1 ? 's' : ''} shown
+              {filteredProjects.length} {ui.projectsShown}
             </p>
           </div>
         </div>
@@ -154,7 +135,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                     <ProjectGallery preview={project.preview} projectName={project.name} />
                     <div className="project-content">
                       <div className="project-cover-header">
-                        <div className="project-num">Issue {project.number}</div>
+                        <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
                         <div className="project-category">{getCategoryLabel(project.category)}</div>
                       </div>
                       <div className="project-arrow">↗</div>
@@ -185,7 +166,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                   <ProjectGallery preview={project.preview} projectName={project.name} />
                   <div className="project-content">
                     <div className="project-cover-header">
-                      <div className="project-num">Issue {project.number}</div>
+                      <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
                       <div className="project-category">{getCategoryLabel(project.category)}</div>
                     </div>
                     <div className="project-arrow">↗</div>

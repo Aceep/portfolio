@@ -2,7 +2,7 @@
 export { Cursor } from './Cursor';
 export { Navigation } from './Navigation';
 export { Hero } from './Hero';
-export { FeaturedReel } from './FeaturedReel';
+export { Focus } from './Focus';
 export { Marquee } from './Marquee';
 export { About } from './About';
 export { Skills } from './Skills';

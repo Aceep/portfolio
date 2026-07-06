@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
+import type { Lang } from '../types';
 import '../styles/components/ProjectModal.css';
 
 interface ProjectModalProps {
@@ -7,50 +9,86 @@ interface ProjectModalProps {
   projectId: string;
 }
 
-/**
- * Project modal component - displays detailed project information
- */
-export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, projectId }) => {
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+interface CaseStudy {
+  title: string;
+  kicker: string;
+  role: string;
+  duration: string;
+  context: string;
+  challenge: string;
+  approach: string[];
+  results: string[];
+  stack: string[];
+}
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
+const HEADINGS: Record<Lang, {
+  context: string;
+  challenge: string;
+  approach: string;
+  results: string;
+  stack: string;
+  soon: string;
+}> = {
+  fr: {
+    context: 'Contexte',
+    challenge: 'Enjeu',
+    approach: 'Approche',
+    results: 'Résultats',
+    stack: 'Stack',
+    soon: 'Détails du projet à venir.',
+  },
+  en: {
+    context: 'Context',
+    challenge: 'Challenge',
+    approach: 'Approach',
+    results: 'Results',
+    stack: 'Stack',
+    soon: 'Project details coming soon.',
+  },
+};
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
-  if (!isOpen) return null;
-
-  const caseStudies: Record<string, {
-    title: string;
-    kicker: string;
-    role: string;
-    duration: string;
-    context: string;
-    challenge: string;
-    approach: string[];
-    results: string[];
-    stack: string[];
-  }> = {
+const CASE_STUDIES: Record<Lang, Record<string, CaseStudy>> = {
+  fr: {
+    'playmakers-professional': {
+      title: 'PlayMakers Platform',
+      kicker: 'Mini étude de cas',
+      role: 'Développeuse Front-End',
+      duration: '09/2024 — 08/2025',
+      context: 'Plateforme sportive en production, utilisée par des clients actifs sur mobile et desktop.',
+      challenge: 'Livrer rapidement de nouvelles fonctionnalités UI tout en préservant la cohérence visuelle et en évitant les régressions dans une bibliothèque de composants en croissance.',
+      approach: [
+        'Conception et maintenance de patterns UI React + TypeScript réutilisables pour les équipes feature.',
+        'Traduction des specs Figma en composants responsives avec une architecture Tailwind.',
+        'Mise en place et suivi de la couverture Jest sur les parcours critiques et les composants partagés.',
+      ],
+      results: [
+        'Cadence de livraison des itérations UI améliorée grâce aux composants réutilisables.',
+        'Régressions UI réduites via la couverture de tests sur les parcours clés.',
+        'Qualité de production stable pendant le déploiement continu de fonctionnalités.',
+      ],
+      stack: ['React 18', 'TypeScript', 'Tailwind CSS', 'Jest', 'Figma', 'Git'],
+    },
+    'davidson-consulting': {
+      title: 'Davidson Consulting ERP',
+      kicker: 'Mini étude de cas',
+      role: 'Développeuse Front-End',
+      duration: '09/2025 — 09/2026',
+      context: 'Projet de modernisation d’une interface ERP, centré sur les workflows internes et les écrans riches en données.',
+      challenge: 'Améliorer la qualité et la cohérence UX sur des vues dashboard complexes, avec les contraintes d’un legacy Vue2.',
+      approach: [
+        'Implémentation de composants Vue2 + TypeScript modulaires pour des écrans métier denses.',
+        'Optimisation du rendu et de l’architecture de styles pour des interactions fluides sur de grands jeux de données.',
+        'Alignement précis de l’implémentation avec les specs Figma (pixel-perfect).',
+      ],
+      results: [
+        'Modules UI plus propres et maintenables pour les pages centrales de l’ERP.',
+        'Performance perçue et clarté des interactions améliorées sur les workflows clés.',
+        'Allers-retours avec le design réduits grâce à une meilleure fidélité aux specs.',
+      ],
+      stack: ['Vue2', 'TypeScript', 'CSS', 'Figma', 'Git'],
+    },
+  },
+  en: {
     'playmakers-professional': {
       title: 'PlayMakers Platform',
       kicker: 'Mini Case Study',
@@ -89,13 +127,51 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
       ],
       stack: ['Vue2', 'TypeScript', 'CSS', 'Figma', 'Git'],
     },
+  },
+};
+
+/**
+ * Project modal component - displays detailed project information
+ */
+export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, projectId }) => {
+  const { lang } = useLanguage();
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
 
+  if (!isOpen) return null;
+
+  const headings = HEADINGS[lang];
+
   const renderContent = () => {
-    const study = caseStudies[projectId];
+    const study = CASE_STUDIES[lang][projectId];
 
     if (!study) {
-      return <div className="modal-content">Project details coming soon.</div>;
+      return <div className="modal-content">{headings.soon}</div>;
     }
 
     return (
@@ -109,17 +185,17 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
         </div>
 
         <div className="modal-section">
-          <h3>Context</h3>
+          <h3>{headings.context}</h3>
           <p>{study.context}</p>
         </div>
 
         <div className="modal-section">
-          <h3>Challenge</h3>
+          <h3>{headings.challenge}</h3>
           <p>{study.challenge}</p>
         </div>
 
         <div className="modal-section">
-          <h3>Approach</h3>
+          <h3>{headings.approach}</h3>
           <ul className="modal-list">
             {study.approach.map((item) => (
               <li key={item}>{item}</li>
@@ -128,7 +204,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
         </div>
 
         <div className="modal-section">
-          <h3>Results</h3>
+          <h3>{headings.results}</h3>
           <ul className="modal-list">
             {study.results.map((item) => (
               <li key={item}>{item}</li>
@@ -137,7 +213,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
         </div>
 
         <div className="modal-section">
-          <h3>Stack</h3>
+          <h3>{headings.stack}</h3>
           <div className="modal-tech-stack">
             {study.stack.map((tech) => (
               <span key={tech} className="tech-badge">{tech}</span>

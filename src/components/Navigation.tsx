@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
 import '../styles/components/Navigation.css';
 
 interface NavigationProps {
-  navLinks?: Array<{ label: string; href: string }>;
   isAvailable?: boolean;
 }
 
 /**
- * Navigation component - Fixed header with logo and navigation links
+ * Navigation component - Fixed header with logo, navigation links and language toggle
  */
-export const Navigation: React.FC<NavigationProps> = ({
-  navLinks = [
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Work', href: '#projects' },
-    { label: 'Videos', href: '#videos' },
-    { label: 'Contact', href: '#contact' },
-  ],
-  isAvailable = true,
-}) => {
+export const Navigation: React.FC<NavigationProps> = ({ isAvailable = true }) => {
+  const { c, lang, toggleLang } = useLanguage();
+  const navLinks = c.ui.navLinks;
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
   const [activeHash, setActiveHash] = useState<string>('#');
@@ -90,12 +84,22 @@ export const Navigation: React.FC<NavigationProps> = ({
         ))}
       </ul>
 
-      {isAvailable && (
-        <div className="nav-available">
-          <div className="dot"></div>
-          Available for hire
-        </div>
-      )}
+      <div className="nav-actions">
+        <button
+          className="nav-lang-toggle"
+          onClick={toggleLang}
+          aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
+        >
+          {c.ui.langToggleLabel}
+        </button>
+
+        {isAvailable && (
+          <div className="nav-available">
+            <div className="dot"></div>
+            {c.ui.navAvailability}
+          </div>
+        )}
+      </div>
 
       {isMenuOpen && <button className="nav-overlay" aria-label="Close navigation menu" onClick={closeMenu} />}
     </nav>

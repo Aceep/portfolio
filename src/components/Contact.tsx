@@ -7,6 +7,7 @@ interface ContactProps {
   title: string;
   description: string;
   contactLinks: ContactLink[];
+  label: string;
 }
 
 /**
@@ -16,11 +17,12 @@ export const Contact: React.FC<ContactProps> = ({
   title,
   description,
   contactLinks,
+  label,
 }) => {
   return (
     <section id="contact">
       <div className="contact-left">
-        <SectionLabel>04 — Contact</SectionLabel>
+        <SectionLabel>{label}</SectionLabel>
         <h2 className="contact-title" dangerouslySetInnerHTML={{ __html: title }} />
         <p className="contact-body">{description}</p>
       </div>
@@ -35,7 +37,12 @@ export const Contact: React.FC<ContactProps> = ({
             rel={link.external ? 'noopener noreferrer' : undefined}
             download={link.id === 'cv' ? 'GAUTIER_Alycia_CV.pdf' : undefined}
           >
-            <span className="cl-label">{link.label}</span>
+            <span className="cl-text">
+              <span className="cl-label">{link.label}</span>
+              {link.id === 'email' && (
+                <span className="cl-value">{link.url.replace('mailto:', '')}</span>
+              )}
+            </span>
             <span className="cl-arrow">↗</span>
           </a>
         ))}
