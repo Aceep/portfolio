@@ -267,7 +267,7 @@ const PORTFOLIO: Record<Lang, PortfolioContent> = {
     tagline: '// Développeuse → Cybersécurité',
     heroJobTitle: 'CYBERSEC',
     heroValue:
-      'Je viens du développement web. Aujourd’hui je sécurise, j’analyse et je reverse le code que je sais écrire.',
+      'En spécialisation en cybersécurité',
     alternanceBanner: 'En recherche d’alternance en cybersécurité',
     alternanceDetail:
       'Master Sécurité & Administration Réseau · 1 sem. école / 2 sem. entreprise · rentrée septembre 2026',
@@ -285,7 +285,7 @@ const PORTFOLIO: Record<Lang, PortfolioContent> = {
     tagline: '// Developer → Cybersecurity',
     heroJobTitle: 'CYBERSEC',
     heroValue:
-      'I come from web development. Today I secure, analyze and reverse the code I know how to write.',
+      'Specializing in cybersecurity',
     alternanceBanner: 'Seeking a cybersecurity apprenticeship',
     alternanceDetail:
       "Master's in Network Security & Administration · 1 wk school / 2 wks company · starting September 2026",
