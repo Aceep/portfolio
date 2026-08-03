@@ -1,20 +1,22 @@
 import React, { useRef } from 'react';
 import { SectionLabel } from './SectionLabel';
-import type { Skill, UIStrings } from '../types';
+import type { Skill, SkillGroup, UIStrings } from '../types';
 import { useIntersectionObserver } from '../hooks';
 import { animateSkillBars } from '../utils';
 import '../styles/components/Skills.css';
 
 interface SkillsProps {
   skills: Skill[];
+  /** Bands to render, in order — declared per positioning. */
+  groups: SkillGroup[];
   ui: UIStrings;
 }
 
 /**
- * Skills section with animated progress bars, split into a cybersecurity group
- * (the target) and a development foundation group (the existing strength).
+ * Skills section with animated progress bars, split into the bands the active
+ * positioning declares (front-end / tooling, or cyber / dev foundation).
  */
-export const Skills: React.FC<SkillsProps> = ({ skills, ui }) => {
+export const Skills: React.FC<SkillsProps> = ({ skills, groups, ui }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useIntersectionObserver((entry) => {
@@ -22,11 +24,6 @@ export const Skills: React.FC<SkillsProps> = ({ skills, ui }) => {
       animateSkillBars(entry.target);
     }
   });
-
-  const groups: Array<{ key: 'cyber' | 'dev'; heading: string }> = [
-    { key: 'cyber', heading: ui.skillsCyberHeading },
-    { key: 'dev', heading: ui.skillsDevHeading },
-  ];
 
   return (
     <section id="skills" ref={sectionRef}>

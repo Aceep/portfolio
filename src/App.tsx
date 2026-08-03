@@ -20,7 +20,19 @@ import './styles/App.css';
  */
 function App() {
   const { c } = useLanguage();
-  const { portfolio, skills, experience, projects, videos, contactLinks, focusPillars, marquee, ui } = c;
+  const {
+    portfolio,
+    skills,
+    skillGroups,
+    experience,
+    projects,
+    videos,
+    contactLinks,
+    cvUrl,
+    focusPillars,
+    marquee,
+    ui,
+  } = c;
 
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll('section'));
@@ -56,7 +68,7 @@ function App() {
       <Cursor />
       <Navigation />
 
-      <Hero portfolio={portfolio} ui={ui} />
+      <Hero portfolio={portfolio} ui={ui} cvUrl={cvUrl} />
 
       <Marquee items={marquee} />
 
@@ -70,7 +82,7 @@ function App() {
         journeyLabel={ui.aboutJourneyLabel}
       />
 
-      <Skills skills={skills} ui={ui} />
+      <Skills skills={skills} groups={skillGroups} ui={ui} />
 
       <Projects projects={projects} ui={ui} />
 
@@ -83,7 +95,11 @@ function App() {
         label={ui.contactLabel}
       />
 
-      <Footer copyright={`© 2025 — ${portfolio.name} — ${ui.footerRole}`} />
+      <Footer
+        copyright={`© 2025 — ${portfolio.name} — ${ui.footerRole}`}
+        otherProfileLabel={ui.otherProfileLabel}
+        otherProfileHref={ui.otherProfileHref}
+      />
     </>
   );
 }

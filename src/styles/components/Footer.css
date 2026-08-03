@@ -3,27 +3,49 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
   border-top: 1px solid var(--border);
 }
 
 .footer-copy {
   font-family: 'Space Mono', monospace;
-  font-size: 9px;
+  font-size: var(--text-2xs);
   color: var(--muted);
   letter-spacing: 2px;
   text-transform: uppercase;
+}
+
+/* Cross-link to the other positioning (front-end ↔ cybersecurity). */
+.footer-profile-link {
+  font-family: 'Space Mono', monospace;
+  font-size: var(--text-2xs);
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+  cursor: none;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.footer-profile-link:hover {
+  color: var(--yellow);
+  border-color: var(--yellow);
+  background: var(--yellow-soft);
 }
 
 @media (max-width: 768px) {
   footer {
     padding: 1.5rem;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.9rem;
     text-align: center;
   }
 
   .footer-copy {
-    font-size: 8px;
     letter-spacing: 1px;
   }
 }
@@ -35,7 +57,6 @@ footer {
   }
 
   .footer-copy {
-    font-size: 7px;
     letter-spacing: 0.5px;
   }
 }

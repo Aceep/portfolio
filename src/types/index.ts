@@ -1,12 +1,26 @@
 export type Lang = 'fr' | 'en';
 
+/**
+ * Which positioning the site is presenting.
+ * - `frontend` — served at `/`, targets a full-time front-end CDI.
+ * - `cyber`    — served at `/cyber`, targets the Sept 2026 security apprenticeship.
+ */
+export type Profile = 'frontend' | 'cyber';
+
 export interface Skill {
   id: string;
   name: string;
   icon: string;
   level: number;
   label: string;
-  group: 'cyber' | 'dev';
+  /** Key of the owning group; the set of groups is declared per profile. */
+  group: string;
+}
+
+/** A titled band in the skills section. Order = display order. */
+export interface SkillGroup {
+  key: string;
+  heading: string;
 }
 
 export interface Experience {
@@ -33,6 +47,8 @@ export interface ContactLink {
   label: string;
   url: string;
   external?: boolean;
+  /** Action verb shown as the row's call to action (e.g. "Écrire", "Ouvrir"). */
+  cta: string;
 }
 
 export interface Video {
@@ -54,8 +70,9 @@ export interface PortfolioContent {
   tagline: string;
   heroJobTitle: string;
   heroValue: string;
-  alternanceBanner: string;
-  alternanceDetail: string;
+  /** What she is looking for — an apprenticeship on /cyber, a CDI on /. */
+  availabilityBanner: string;
+  availabilityDetail: string;
   yearsExp: string;
   aboutTitle: string;
   aboutDescription: string;
@@ -77,8 +94,6 @@ export interface UIStrings {
   aboutLabel: string;
   aboutJourneyLabel: string;
   skillsLabel: string;
-  skillsCyberHeading: string;
-  skillsDevHeading: string;
   projectsTitle: string;
   projectsKicker: string;
   projectsSummary: string;
@@ -92,6 +107,10 @@ export interface UIStrings {
   categoryPersonal: string;
   categoryLab: string;
   categoryFeature: string;
+  /** Call to action on project cards that open an external link. */
+  projectCta: string;
+  /** Call to action on project cards that open the detail modal. */
+  projectCtaDetails: string;
   focusLabel: string;
   videosLabel: string;
   videosHeading: string;
@@ -99,18 +118,25 @@ export interface UIStrings {
   contactLabel: string;
   contactTitle: string;
   footerRole: string;
+  /** Discreet cross-link to the other positioning of the site. */
+  otherProfileLabel: string;
+  otherProfileHref: string;
 }
 
 /**
  * Fully-resolved, single-language content bundle consumed by the app.
  */
 export interface LocalizedContent {
+  profile: Profile;
   portfolio: PortfolioContent;
   skills: Skill[];
+  skillGroups: SkillGroup[];
   experience: Experience[];
   projects: Project[];
   videos: Video[];
   contactLinks: ContactLink[];
+  /** CV to download for this positioning. */
+  cvUrl: string;
   focusPillars: FocusPillar[];
   marquee: string[];
   ui: UIStrings;

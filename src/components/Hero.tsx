@@ -6,13 +6,15 @@ import '../styles/components/Hero.css';
 interface HeroProps {
   portfolio: PortfolioContent;
   ui: UIStrings;
+  /** CV matching the active positioning. */
+  cvUrl: string;
 }
 
 /**
  * Hero section - Large striking landing area with CTA buttons
  */
-export const Hero: React.FC<HeroProps> = ({ portfolio, ui }) => {
-  const { name, tagline, heroJobTitle, heroValue, yearsExp, alternanceBanner, alternanceDetail } =
+export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
+  const { name, tagline, heroJobTitle, heroValue, yearsExp, availabilityBanner, availabilityDetail } =
     portfolio;
   const [firstName, ...lastNameParts] = name.toUpperCase().split(' ');
   const lastName = lastNameParts.join(' ');
@@ -33,8 +35,8 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui }) => {
         <div className="hero-alternance" role="note">
           <span className="hero-alternance-dot" aria-hidden="true" />
           <span className="hero-alternance-text">
-            <strong>{alternanceBanner}</strong>
-            <span className="hero-alternance-detail">{alternanceDetail}</span>
+            <strong>{availabilityBanner}</strong>
+            <span className="hero-alternance-detail">{availabilityDetail}</span>
           </span>
         </div>
 
@@ -42,7 +44,7 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui }) => {
           <Button variant="primary" href="#projects">
             {ui.heroCtaWork}
           </Button>
-          <Button variant="secondary" href="/GAUTIER_Alycia_CV.pdf" download="GAUTIER_Alycia_CV.pdf">
+          <Button variant="secondary" href={cvUrl} download>
             {ui.heroCtaCv}
           </Button>
         </div>

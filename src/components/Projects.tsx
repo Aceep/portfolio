@@ -82,6 +82,36 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
     return null;
   }
 
+  /**
+   * Inner card body, shared by the modal (button) and external-link (anchor)
+   * variants so the call to action only has to be described once.
+   */
+  const renderCardBody = (project: Project, ctaLabel: string | null) => (
+    <>
+      <ProjectGallery preview={project.preview} projectName={project.name} />
+      <div className="project-content">
+        <div className="project-cover-header">
+          <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
+          <div className="project-category">{getCategoryLabel(project.category)}</div>
+        </div>
+        <h3 className="project-name">{project.name}</h3>
+        <p className="project-desc">{project.description}</p>
+        <div className="project-tags">
+          {project.tags.map((tag) => (
+            <Tag key={tag}>{tag}</Tag>
+          ))}
+        </div>
+        {ctaLabel && (
+          <div className="project-cta">
+            <span className="project-cta-label">{ctaLabel}</span>
+            <span className="project-cta-arrow" aria-hidden="true">↗</span>
+          </div>
+        )}
+      </div>
+      <div className="project-accent"></div>
+    </>
+  );
+
   return (
     <>
       <section id="projects" className="projects-section">
@@ -132,22 +162,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
                   style={{ ['--cover-index' as string]: index } as React.CSSProperties}
                 >
                   <div className="project-card">
-                    <ProjectGallery preview={project.preview} projectName={project.name} />
-                    <div className="project-content">
-                      <div className="project-cover-header">
-                        <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
-                        <div className="project-category">{getCategoryLabel(project.category)}</div>
-                      </div>
-                      <div className="project-arrow">↗</div>
-                      <h3 className="project-name">{project.name.split('\n').join('\n')}</h3>
-                      <p className="project-desc">{project.description}</p>
-                      <div className="project-tags">
-                        {project.tags.map((tag) => (
-                          <Tag key={tag}>{tag}</Tag>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="project-accent"></div>
+                    {renderCardBody(project, ui.projectCtaDetails)}
                   </div>
                 </button>
               );
@@ -163,22 +178,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
                 style={{ pointerEvents: project.link ? 'auto' : 'none' }}
               >
                 <div className="project-card" style={{ ['--cover-index' as string]: index } as React.CSSProperties}>
-                  <ProjectGallery preview={project.preview} projectName={project.name} />
-                  <div className="project-content">
-                    <div className="project-cover-header">
-                      <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
-                      <div className="project-category">{getCategoryLabel(project.category)}</div>
-                    </div>
-                    <div className="project-arrow">↗</div>
-                    <h3 className="project-name">{project.name.split('\n').join('\n')}</h3>
-                    <p className="project-desc">{project.description}</p>
-                    <div className="project-tags">
-                      {project.tags.map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="project-accent"></div>
+                  {renderCardBody(project, project.link ? ui.projectCta : null)}
                 </div>
               </a>
             );

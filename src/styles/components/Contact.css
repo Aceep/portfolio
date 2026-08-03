@@ -27,67 +27,126 @@
 
 .contact-body {
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
   line-height: 1.8;
-  max-width: 430px;
+  max-width: 46ch;
 }
 
+/* Detached rows: each contact link is its own card. */
 .contact-right {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
+  gap: 1rem;
 }
 
 .contact-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.45rem 1.8rem;
-  background: var(--bg);
+  gap: 1.5rem;
+  padding: 1.5rem 1.8rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   text-decoration: none;
   color: var(--text);
-  transition: background 0.2s;
   cursor: none;
+  transition:
+    background var(--motion-base) var(--ease-standard),
+    border-color var(--motion-base) var(--ease-standard),
+    transform 320ms var(--ease-standard),
+    box-shadow 320ms var(--ease-standard);
 }
 
-.contact-link:hover {
-  background: var(--surface2);
+.contact-link:hover,
+.contact-link:focus-visible {
+  background: var(--card-bg-hover);
+  border-color: var(--yellow);
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover), var(--card-glow-hover);
 }
 
-.contact-link:hover .cl-arrow {
-  color: var(--yellow);
-  transform: translate(4px, -4px);
+.contact-link:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
 }
 
 .cl-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
+  min-width: 0;
 }
 
 .cl-label {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: var(--text-sm);
+  font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
 
 .cl-value {
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
+  font-size: var(--text-xs);
   letter-spacing: 0.5px;
   color: var(--muted);
   text-transform: none;
+  overflow-wrap: anywhere;
+}
+
+/* Call to action — muted until the row is hovered or focused. */
+.cl-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color var(--motion-base) var(--ease-standard);
+}
+
+.cl-cta-label {
+  position: relative;
+}
+
+.cl-cta-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.35s var(--ease-standard);
 }
 
 .cl-arrow {
-  transition: transform 0.2s, color 0.2s;
-  color: var(--muted);
-  font-size: 16px;
+  font-size: 1.3em;
+  line-height: 1;
+  transition: transform var(--motion-base) var(--ease-standard);
+}
+
+.contact-link:hover .cl-cta,
+.contact-link:focus-visible .cl-cta {
+  color: var(--yellow);
+}
+
+.contact-link:hover .cl-cta-label::after,
+.contact-link:focus-visible .cl-cta-label::after {
+  width: 100%;
+}
+
+.contact-link:hover .cl-arrow,
+.contact-link:focus-visible .cl-arrow {
+  transform: translate(4px, -4px);
 }
 
 @media (max-width: 768px) {
@@ -103,21 +162,15 @@
   }
 
   .contact-body {
-    font-size: 11px;
     max-width: 100%;
   }
 
+  .contact-right {
+    gap: 0.85rem;
+  }
+
   .contact-link {
-    padding: 1.2rem 1.5rem;
-  }
-
-  .cl-label {
-    font-size: 10px;
-    letter-spacing: 1.2px;
-  }
-
-  .cl-arrow {
-    font-size: 14px;
+    padding: 1.25rem 1.5rem;
   }
 }
 
@@ -133,22 +186,33 @@
   }
 
   .contact-body {
-    font-size: 11px;
     line-height: 1.6;
   }
 
   .contact-link {
-    padding: 1rem 1.2rem;
+    padding: 1.1rem 1.2rem;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.9rem;
   }
 
-  .cl-label {
-    font-size: 10px;
+  .cl-cta {
+    letter-spacing: 1.2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-link,
+  .contact-link:hover,
+  .contact-link:focus-visible {
+    transform: none;
   }
 
-  .cl-arrow {
-    font-size: 12px;
+  .cl-arrow,
+  .contact-link:hover .cl-arrow,
+  .cl-cta-label::after,
+  .contact-link:hover .cl-cta-label::after {
+    transform: none;
+    transition: none;
   }
 }

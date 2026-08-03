@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import type { Lang, LocalizedContent } from '../types';
+import type { Lang, LocalizedContent, Profile } from '../types';
 import { getContent } from '../constants/content';
+import { getCurrentProfile } from './profile';
 
 interface LanguageContextValue {
   lang: Lang;
   setLang: (lang: Lang) => void;
   toggleLang: () => void;
+  /** Which positioning is being served (see src/i18n/profile.ts). */
+  profile: Profile;
   c: LocalizedContent;
 }
 
@@ -27,8 +30,15 @@ const getInitialLang = (): Lang => {
   return isLang(stored) ? stored : 'fr';
 };
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface LanguageProviderProps {
+  children: React.ReactNode;
+  /** Defaults to the positioning matching the current URL. */
+  profile?: Profile;
+}
+
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children, profile }) => {
   const [lang, setLangState] = useState<Lang>(getInitialLang);
+  const activeProfile = profile ?? getCurrentProfile();
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -40,9 +50,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       lang,
       setLang: setLangState,
       toggleLang: () => setLangState((prev) => (prev === 'fr' ? 'en' : 'fr')),
-      c: getContent(lang),
+      profile: activeProfile,
+      c: getContent(lang, activeProfile),
     }),
-    [lang]
+    [lang, activeProfile]
   );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

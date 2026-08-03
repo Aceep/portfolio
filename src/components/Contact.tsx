@@ -35,7 +35,7 @@ export const Contact: React.FC<ContactProps> = ({
             href={link.url}
             target={link.external ? '_blank' : undefined}
             rel={link.external ? 'noopener noreferrer' : undefined}
-            download={link.id === 'cv' ? 'GAUTIER_Alycia_CV.pdf' : undefined}
+            download={link.id === 'cv' ? true : undefined}
           >
             <span className="cl-text">
               <span className="cl-label">{link.label}</span>
@@ -43,7 +43,10 @@ export const Contact: React.FC<ContactProps> = ({
                 <span className="cl-value">{link.url.replace('mailto:', '')}</span>
               )}
             </span>
-            <span className="cl-arrow">↗</span>
+            <span className="cl-cta">
+              <span className="cl-cta-label">{link.cta}</span>
+              <span className="cl-arrow" aria-hidden="true">↗</span>
+            </span>
           </a>
         ))}
       </div>
