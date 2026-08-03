@@ -107,6 +107,7 @@ const PROJECTS_META: ProjectMeta[] = [
     tags: ['React', 'Ethereum', 'Smart Contracts'],
     link: 'https://kyle-nft-9wih.vercel.app/',
     category: 'school',
+    preview: '/media/projects/nft-kyle-preview.jpg',
   },
   {
     id: 'mes-collections',
@@ -144,6 +145,7 @@ const PROJECTS_META: ProjectMeta[] = [
     tags: ['JavaScript', 'CSS', 'Community'],
     link: 'https://annabeth-library.vercel.app/',
     category: 'personal',
+    preview: '/media/projects/annabeth-library-preview.jpg',
   },
   {
     id: 'playmakers-professional',
