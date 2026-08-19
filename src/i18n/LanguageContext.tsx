@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import type { Lang, LocalizedContent, Profile } from '../types';
 import { getContent } from '../constants/content';
 import { getCurrentProfile } from './profile';
+import { applyDocumentMeta } from './meta';
 
 interface LanguageContextValue {
   lang: Lang;
@@ -41,9 +42,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children, pr
   const activeProfile = profile ?? getCurrentProfile();
 
   useEffect(() => {
-    document.documentElement.lang = lang;
     window.localStorage.setItem(STORAGE_KEY, lang);
-  }, [lang]);
+    applyDocumentMeta(lang, activeProfile);
+  }, [lang, activeProfile]);
 
   const value = useMemo<LanguageContextValue>(
     () => ({

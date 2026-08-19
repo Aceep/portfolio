@@ -2,39 +2,48 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/Kyle.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/Kyle.png" />
 
-    <title>Alycia Gautier — Développeuse → Cybersécurité · Alternance 2026</title>
+    <!--
+      `/` serves the front-end positioning, so that is what ships statically —
+      link scrapers do not run JS. The `/cyber` variant swaps title and
+      description at runtime (see src/i18n/meta.ts).
+    -->
+    <title>Alycia Gautier — Développeuse Front-End React &amp; TypeScript</title>
     <meta
       name="description"
-      content="Alycia Gautier — développeuse front-end en spécialisation cybersécurité (Master Sécurité & Administration Réseau). En recherche d'alternance en cybersécurité pour septembre 2026. Réseau, Linux, reverse engineering."
+      content="Développeuse front-end, deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d'un CDI à partir de septembre 2026, Paris ou télétravail."
     />
     <meta name="author" content="Alycia Gautier" />
-    <meta
-      name="keywords"
-      content="cybersécurité, alternance, reverse engineering, Linux, réseau, développeuse, front-end, Master sécurité"
-    />
 
     <!-- Open Graph / social sharing -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Alycia Gautier — Développeuse → Cybersécurité" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
     <meta
       property="og:description"
-      content="En recherche d'alternance en cybersécurité pour septembre 2026. Un profil dev qui bascule vers la sécurité : réseau, Linux, reverse engineering."
+      content="Deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d'un CDI à partir de septembre 2026."
     />
-    <meta property="og:image" content="/Kyle.png" />
+    <meta property="og:image" content="/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:locale:alternate" content="en_US" />
 
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Alycia Gautier — Développeuse → Cybersécurité" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
     <meta
       name="twitter:description"
-      content="En recherche d'alternance en cybersécurité pour septembre 2026."
+      content="Deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. CDI recherché à partir de septembre 2026."
     />
+    <meta name="twitter:image" content="/og-card.png" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>
