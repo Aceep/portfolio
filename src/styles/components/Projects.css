@@ -1,8 +1,4 @@
-#projects {
-  padding: 5.5rem 2rem;
-  border-bottom: 1px solid var(--border);
-}
-
+#projects,
 .projects-section {
   padding: 5.5rem 2rem;
   border-bottom: 1px solid var(--border);
@@ -429,4 +425,14 @@
     transform: none;
     transition: none;
   }
+}
+
+/* Empty state — shown in place of the cards so the filter bar stays reachable. */
+.projects-empty {
+  grid-column: 1 / -1;
+  padding: 3rem 0;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: var(--text-sm);
+  color: var(--muted);
 }
