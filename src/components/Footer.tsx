@@ -3,7 +3,6 @@ import '../styles/components/Footer.css';
 
 interface FooterProps {
   copyright: string;
-  buildInfo?: string;
   /** Discreet link to the other positioning of the site. */
   otherProfileLabel: string;
   otherProfileHref: string;
@@ -14,7 +13,6 @@ interface FooterProps {
  */
 export const Footer: React.FC<FooterProps> = ({
   copyright,
-  buildInfo = 'Built with 🦕',
   otherProfileLabel,
   otherProfileHref,
 }) => {
@@ -25,7 +23,6 @@ export const Footer: React.FC<FooterProps> = ({
         {otherProfileLabel}
         <span aria-hidden="true"> ↗</span>
       </a>
-      <div className="footer-copy">{buildInfo}</div>
     </footer>
   );
 };
