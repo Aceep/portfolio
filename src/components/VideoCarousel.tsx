@@ -7,8 +7,12 @@ interface VideoCarouselProps {
 }
 
 /**
- * Video carousel component
- * Displays videos with hover previews and carousel navigation
+ * Short-film carousel.
+ *
+ * Only the selected clip is ever mounted as a <video>, and nothing is fetched
+ * until the visitor presses play (`preload="none"`): the source files are the
+ * heaviest assets on the page, so the thumbnail strip uses poster images
+ * rather than a second set of media elements.
  */
 export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos }) => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
@@ -17,50 +21,48 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos }) => {
 
   const selectedVideo = videos[selectedVideoIndex];
 
-  const handlePrevious = () => {
-    setSelectedVideoIndex((prev) => (prev === 0 ? videos.length - 1 : prev - 1));
-    setIsPlaying(false);
-  };
-
-  const handleNext = () => {
-    setSelectedVideoIndex((prev) => (prev === videos.length - 1 ? 0 : prev + 1));
-    setIsPlaying(false);
-  };
-
-  const handlePlay = () => {
-    setIsPlaying(true);
-    videoRef.current?.play();
-  };
-
-  const handleThumbnailClick = (index: number) => {
+  const select = (index: number) => {
     setSelectedVideoIndex(index);
     setIsPlaying(false);
   };
 
+  const handlePrevious = () => select(selectedVideoIndex === 0 ? videos.length - 1 : selectedVideoIndex - 1);
+  const handleNext = () => select(selectedVideoIndex === videos.length - 1 ? 0 : selectedVideoIndex + 1);
+
+  const handlePlay = () => {
+    void videoRef.current?.play();
+  };
+
   return (
     <div className="video-carousel">
-      {/* Main video player */}
       <div className="video-player">
         <video
           ref={videoRef}
+          key={selectedVideo.id}
           src={`/videos/${selectedVideo.filename}`}
+          poster={selectedVideo.poster}
           className="video-element"
+          preload="none"
+          controls={isPlaying}
           controlsList="nodownload"
+          playsInline
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
           onEnded={() => setIsPlaying(false)}
         />
 
-        {/* Overlay with play button if not playing */}
+        {/* Poster overlay — also the only thing standing between the visitor
+            and a multi-megabyte download, so it stays until they opt in. */}
         {!isPlaying && (
-          <div className="video-overlay" onClick={handlePlay}>
-            <button className="play-button" aria-label="Play video">
+          <button className="video-overlay" onClick={handlePlay} aria-label={`Play ${selectedVideo.title}`}>
+            <span className="play-button" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z" />
               </svg>
-            </button>
-          </div>
+            </span>
+          </button>
         )}
 
-        {/* Video info */}
         <div className="video-info-overlay">
           <h3 className="video-title">{selectedVideo.title}</h3>
           {selectedVideo.description && (
@@ -69,49 +71,39 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos }) => {
         </div>
       </div>
 
-      {/* Navigation arrows */}
       <div className="carousel-controls">
-        <button
-          className="carousel-arrow prev"
-          onClick={handlePrevious}
-          aria-label="Previous video"
-        >
+        <button className="carousel-arrow prev" onClick={handlePrevious} aria-label="Previous video">
           ←
         </button>
-        <button
-          className="carousel-arrow next"
-          onClick={handleNext}
-          aria-label="Next video"
-        >
+        <button className="carousel-arrow next" onClick={handleNext} aria-label="Next video">
           →
         </button>
       </div>
 
-      {/* Thumbnail strip */}
       <div className="video-thumbnails">
         {videos.map((video, index) => (
-          <div
+          <button
             key={video.id}
+            type="button"
             className={`thumbnail ${index === selectedVideoIndex ? 'active' : ''}`}
-            onClick={() => handleThumbnailClick(index)}
+            onClick={() => select(index)}
+            aria-current={index === selectedVideoIndex}
           >
-            <video
-              src={`/videos/${video.filename}`}
-              className="thumbnail-video"
-              muted
-              preload="metadata"
-            />
-            <div className="thumbnail-overlay">
-              <svg className="thumbnail-play" viewBox="0 0 24 24" fill="currentColor">
+            {video.poster ? (
+              <img src={video.poster} alt="" className="thumbnail-media" loading="lazy" decoding="async" />
+            ) : (
+              <video src={`/videos/${video.filename}`} className="thumbnail-media" muted preload="metadata" />
+            )}
+            <span className="thumbnail-overlay">
+              <svg className="thumbnail-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M8 5v14l11-7z" />
               </svg>
-            </div>
-            <div className="thumbnail-label">{video.title}</div>
-          </div>
+            </span>
+            <span className="thumbnail-label">{video.title}</span>
+          </button>
         ))}
       </div>
 
-      {/* Counter */}
       <div className="carousel-counter">
         {selectedVideoIndex + 1} / {videos.length}
       </div>

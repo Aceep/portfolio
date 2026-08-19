@@ -57,7 +57,13 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
         <div className="hero-glow"></div>
 
         {/* Kyle mascot */}
-        <img src="/Kyle.png" alt="Kyle - Website Mascot" className="hero-kyle" />
+        <img
+          src="/Kyle.png"
+          alt=""
+          className="hero-kyle"
+          width={455}
+          height={548}
+        />
 
         {/* Spinning badge */}
         <div className="hero-badge">
