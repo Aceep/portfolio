@@ -23,6 +23,9 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
         alt={`${projectName} preview`}
         className="project-preview-image"
         loading="lazy"
+        decoding="async"
+        width={1280}
+        height={720}
       />
     </div>
   );

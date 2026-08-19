@@ -7,7 +7,7 @@
 
 .video-player {
   position: relative;
-  background: var(--black);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
@@ -26,6 +26,9 @@
 .video-overlay {
   position: absolute;
   inset: 0;
+  border: none;
+  padding: 0;
+  font: inherit;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
@@ -43,9 +46,10 @@
 .play-button {
   width: 80px;
   height: 80px;
+  flex: none;
   border-radius: 50%;
   background: var(--yellow);
-  color: var(--black);
+  color: var(--bg);
   border: none;
   display: flex;
   align-items: center;
@@ -56,9 +60,15 @@
   box-shadow: 0 0 40px rgba(210, 161, 58, 0.3);
 }
 
-.play-button:hover {
+.video-overlay:hover .play-button {
   transform: scale(1.1);
   box-shadow: 0 0 60px rgba(210, 161, 58, 0.45);
+}
+
+/* Without an explicit size an SVG with only a viewBox falls back to 300x150. */
+.play-button svg {
+  width: 32px;
+  height: 32px;
 }
 
 /* Video info overlay */
@@ -131,6 +141,12 @@
 .thumbnail {
   position: relative;
   cursor: pointer;
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
   border-radius: 6px;
   overflow: hidden;
   border: 2px solid transparent;
@@ -148,7 +164,7 @@
   transform: scale(1.02);
 }
 
-.thumbnail-video {
+.thumbnail-media {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -180,6 +196,7 @@
 
 .thumbnail-label {
   position: absolute;
+  display: block;
   bottom: 0;
   left: 0;
   right: 0;
@@ -291,5 +308,21 @@
     padding: 0.35rem 0.7rem;
     bottom: 0.75rem;
     right: 1rem;
+  }
+}
+
+.video-overlay:focus-visible,
+.thumbnail:focus-visible,
+.carousel-arrow:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumbnail,
+  .play-button,
+  .video-overlay:hover .play-button {
+    transition: none;
+    transform: none;
   }
 }

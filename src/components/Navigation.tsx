@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import '../styles/components/Navigation.css';
 
-interface NavigationProps {
-  isAvailable?: boolean;
-}
-
 /**
  * Navigation component - Fixed header with logo, navigation links and language toggle
  */
-export const Navigation: React.FC<NavigationProps> = ({ isAvailable = true }) => {
+export const Navigation: React.FC = () => {
   const { c, lang, toggleLang } = useLanguage();
   const navLinks = c.ui.navLinks;
 
@@ -57,7 +53,13 @@ export const Navigation: React.FC<NavigationProps> = ({ isAvailable = true }) =>
   return (
     <nav className={`site-nav ${isCompact ? 'compact' : ''}`}>
       <a className="nav-logo" href="#">
-        <img src="/Kyle.png" alt="Logo" className="nav-logo-image" />
+        <img
+          src="/Kyle.png"
+          alt=""
+          className="nav-logo-image"
+          width={455}
+          height={548}
+        />
         <span className="nav-brand">Aceep&Kyle</span>
       </a>
 
@@ -93,12 +95,10 @@ export const Navigation: React.FC<NavigationProps> = ({ isAvailable = true }) =>
           {c.ui.langToggleLabel}
         </button>
 
-        {isAvailable && (
-          <div className="nav-available">
-            <div className="dot"></div>
-            {c.ui.navAvailability}
-          </div>
-        )}
+        <div className="nav-available">
+          <div className="dot"></div>
+          {c.ui.navAvailability}
+        </div>
       </div>
 
       {isMenuOpen && <button className="nav-overlay" aria-label="Close navigation menu" onClick={closeMenu} />}
