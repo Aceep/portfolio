@@ -3,12 +3,11 @@ import '../styles/components/Tag.css';
 
 interface TagProps {
   children: string;
-  variant?: 'default';
 }
 
 /**
  * Reusable tag/badge component
  */
-export const Tag: React.FC<TagProps> = ({ children, variant = 'default' }) => {
-  return <span className={`tag tag-${variant}`}>{children}</span>;
+export const Tag: React.FC<TagProps> = ({ children }) => {
+  return <span className="tag">{children}</span>;
 };
