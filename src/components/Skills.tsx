@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { SectionLabel } from './SectionLabel';
 import type { Skill, SkillGroup, UIStrings } from '../types';
 import { useIntersectionObserver } from '../hooks';
@@ -17,13 +17,10 @@ interface SkillsProps {
  * positioning declares (front-end / tooling, or cyber / dev foundation).
  */
 export const Skills: React.FC<SkillsProps> = ({ skills, groups, ui }) => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useIntersectionObserver((entry) => {
-    if (entry.target) {
-      animateSkillBars(entry.target);
-    }
-  });
+  // The ref this returns is what gets observed — it must be on the element.
+  const sectionRef = useIntersectionObserver<HTMLElement>((entry) =>
+    animateSkillBars(entry.target)
+  );
 
   return (
     <section id="skills" ref={sectionRef}>

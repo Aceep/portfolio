@@ -71,31 +71,44 @@ export const useCursorTracker = () => {
 };
 
 /**
- * Hook for animating elements on intersection (scroll into view)
+ * Observe the returned ref and run `callback` the first time it scrolls into
+ * view. The callback is held in a ref so an inline arrow at the call site
+ * doesn't tear down and rebuild the observer on every render.
+ *
+ * Attach the returned ref to the element you want observed — that is the whole
+ * contract; nothing happens if it stays unattached.
  */
-export const useIntersectionObserver = (callback: (entry: IntersectionObserverEntry) => void) => {
-  const ref = useRef<HTMLDivElement | null>(null);
+export const useIntersectionObserver = <T extends HTMLElement = HTMLDivElement>(
+  callback: (entry: IntersectionObserverEntry) => void
+) => {
+  const ref = useRef<T | null>(null);
+  const callbackRef = useRef(callback);
 
   useEffect(() => {
-    if (!ref.current) return;
+    callbackRef.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            callback(entry);
-          }
+          if (!entry.isIntersecting) return;
+          callbackRef.current(entry);
+          observer.unobserve(entry.target);
         });
       },
       { threshold: 0.3 }
     );
 
-    observer.observe(ref.current);
+    observer.observe(element);
 
     return () => {
       observer.disconnect();
     };
-  }, [callback]);
+  }, []);
 
   return ref;
 };

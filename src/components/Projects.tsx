@@ -78,10 +78,6 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
     filterButtonRefs.current[nextIndex]?.focus();
   };
 
-  if (filteredProjects.length === 0) {
-    return null;
-  }
-
   /**
    * Inner card body, shared by the modal (button) and external-link (anchor)
    * variants so the call to action only has to be described once.
@@ -152,6 +148,10 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
         </div>
 
         <div key={activeFilter} className="projects-grid" id="projects-grid-panel" role="tabpanel" aria-live="polite">
+          {filteredProjects.length === 0 && (
+            <p className="projects-empty">{ui.projectsEmpty}</p>
+          )}
+
           {filteredProjects.map((project, index) => {
             if (project.modal) {
               return (
