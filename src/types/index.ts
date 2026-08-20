@@ -126,7 +126,7 @@ export interface UIStrings {
   aboutLabel: string;
   aboutJourneyLabel: string;
   skillsLabel: string;
-  projectsTitle: string;
+  projectsLabel: string;
   projectsKicker: string;
   projectsSummary: string;
   projectsShown: string;

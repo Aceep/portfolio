@@ -111,9 +111,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
   return (
     <>
       <section id="projects" className="projects-section">
-        <SectionLabel>
-          03 — {ui.projectsTitle}
-        </SectionLabel>
+        <SectionLabel>{ui.projectsLabel}</SectionLabel>
 
         <div className="projects-header">
           <p className="projects-kicker">{ui.projectsKicker}</p>

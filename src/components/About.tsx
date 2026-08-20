@@ -25,7 +25,7 @@ export const About: React.FC<AboutProps> = ({
     <section id="about">
       <div className="about-left">
         <SectionLabel>{label}</SectionLabel>
-        <h2 className="about-title" dangerouslySetInnerHTML={{ __html: title }} />
+        <h2 className="about-title">{title}</h2>
         <p className="about-body">{description}</p>
       </div>
 
