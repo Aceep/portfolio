@@ -16,20 +16,51 @@ export const Navigation: React.FC = () => {
   useEffect(() => {
     const sectionIds = navLinks.map((link) => link.href).filter((href) => href.startsWith('#'));
 
-    const updateStateOnScroll = () => {
+    /*
+     * Section offsets are measured once and on resize, not on every scroll
+     * tick. Reading `offsetTop` inside the scroll handler forced a synchronous
+     * layout on each event — five queries plus five reads, per tick.
+     */
+    let offsets: Array<{ href: string; top: number }> = [];
+
+    const measure = () => {
+      offsets = sectionIds
+        .map((href) => {
+          const section = document.querySelector(href);
+          return section instanceof HTMLElement ? { href, top: section.offsetTop } : null;
+        })
+        .filter((entry): entry is { href: string; top: number } => entry !== null);
+    };
+
+    // Reads are batched into a frame so a burst of scroll events costs one
+    // update rather than one per event.
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
       setIsCompact(window.scrollY > 24);
 
       const scrollPosition = window.scrollY + 180;
       let currentSection = '#';
 
-      sectionIds.forEach((id) => {
-        const section = document.querySelector(id);
-        if (section && section instanceof HTMLElement && section.offsetTop <= scrollPosition) {
-          currentSection = id;
+      offsets.forEach(({ href, top }) => {
+        if (top <= scrollPosition) {
+          currentSection = href;
         }
       });
 
       setActiveHash(currentSection);
+    };
+
+    const onScroll = () => {
+      if (!frame) {
+        frame = requestAnimationFrame(update);
+      }
+    };
+
+    const onResize = () => {
+      measure();
+      onScroll();
     };
 
     const syncHash = () => {
@@ -37,13 +68,17 @@ export const Navigation: React.FC = () => {
     };
 
     syncHash();
-    updateStateOnScroll();
+    measure();
+    update();
 
-    window.addEventListener('scroll', updateStateOnScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
     window.addEventListener('hashchange', syncHash);
 
     return () => {
-      window.removeEventListener('scroll', updateStateOnScroll);
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('hashchange', syncHash);
     };
   }, [navLinks]);

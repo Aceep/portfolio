@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Projects } from './Projects';
@@ -11,26 +11,27 @@ const { ui } = content;
 
 // `playmakers-professional` is the id the real case-study table is keyed by,
 // so the modal renders actual content rather than the fallback.
-const PROJECTS: Project[] = [
-  {
-    id: 'playmakers-professional',
-    number: '001',
-    name: 'PlayMakers',
-    description: 'Plateforme sportive en production.',
-    tags: ['React', 'TypeScript'],
-    category: 'professional',
-    modal: true,
-  },
-  {
-    id: 'shifumi',
-    number: '002',
-    name: 'Shifumi',
-    description: 'Pierre-feuille-ciseaux.',
-    tags: ['JavaScript'],
-    category: 'personal',
-    link: 'https://example.com/shifumi',
-  },
-];
+const PLAYMAKERS: Project = {
+  id: 'playmakers-professional',
+  number: '001',
+  name: 'PlayMakers',
+  description: 'Plateforme sportive en production.',
+  tags: ['React', 'TypeScript'],
+  category: 'professional',
+  modal: true,
+};
+
+const SHIFUMI: Project = {
+  id: 'shifumi',
+  number: '002',
+  name: 'Shifumi',
+  description: 'Pierre-feuille-ciseaux.',
+  tags: ['JavaScript'],
+  category: 'personal',
+  link: 'https://example.com/shifumi',
+};
+
+const PROJECTS: Project[] = [PLAYMAKERS, SHIFUMI];
 
 const renderProjects = (projects: Project[] = PROJECTS) =>
   render(
@@ -43,6 +44,13 @@ const grid = () => screen.getByRole('tabpanel');
 const tab = (name: RegExp) => screen.getByRole('tab', { name });
 
 describe('Projects', () => {
+  beforeEach(() => {
+    // The provider now honours the browser locale on a first visit, and jsdom
+    // reports en-US. These assertions are written against the French bundle,
+    // so state the choice explicitly rather than depending on the default.
+    localStorage.setItem('portfolio-lang', 'fr');
+  });
+
   it('shows every project under the default filter', () => {
     renderProjects();
 
@@ -166,7 +174,7 @@ describe('Projects', () => {
   });
 
   it('renders a project with no link as plain content, not a broken link', () => {
-    renderProjects([{ ...PROJECTS[1], link: undefined }]);
+    renderProjects([{ ...SHIFUMI, link: undefined }]);
 
     expect(screen.queryByRole('link', { name: /Shifumi/ })).not.toBeInTheDocument();
     expect(within(grid()).getByText('Shifumi')).toBeInTheDocument();
@@ -174,7 +182,7 @@ describe('Projects', () => {
 
   it('falls back to a placeholder when a modal project has no case study', async () => {
     const user = userEvent.setup();
-    renderProjects([{ ...PROJECTS[0], id: 'not-written-yet' }]);
+    renderProjects([{ ...PLAYMAKERS, id: 'not-written-yet' }]);
 
     await user.click(screen.getByRole('button', { name: /PlayMakers/ }));
 

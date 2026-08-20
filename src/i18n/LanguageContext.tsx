@@ -20,15 +20,22 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 const isLang = (value: unknown): value is Lang => value === 'fr' || value === 'en';
 
 /**
- * Resolve the initial language: stored preference → 'fr'.
- * The portfolio targets the French apprenticeship market, so French is the
- * default first impression regardless of browser locale; visitors can switch.
+ * Resolve the initial language: stored preference → browser locale → 'fr'.
+ *
+ * French stays the default because the roles are French. But the site is
+ * genuinely bilingual and the toggle is a small chip in the nav, so an
+ * English-speaking recruiter used to land on French copy and have to find it.
+ * A browser that asks for anything other than French now gets English on the
+ * first visit only — an explicit choice is stored and always wins afterwards.
  */
 const getInitialLang = (): Lang => {
   if (typeof window === 'undefined') return 'fr';
 
   const stored = window.localStorage.getItem(STORAGE_KEY);
-  return isLang(stored) ? stored : 'fr';
+  if (isLang(stored)) return stored;
+
+  const preferred = window.navigator?.languages?.[0] ?? window.navigator?.language;
+  return preferred && !preferred.toLowerCase().startsWith('fr') ? 'en' : 'fr';
 };
 
 interface LanguageProviderProps {

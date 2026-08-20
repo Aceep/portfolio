@@ -3,17 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/Kyle.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!--
-      `/` serves the front-end positioning, so that is what ships statically —
-      link scrapers do not run JS. The `/cyber` variant swaps title and
-      description at runtime (see src/i18n/meta.ts).
+      `/` serves the front-end positioning, so that is what ships statically.
+      `/cyber` gets its own document, generated from this one at build time by
+      scripts/build-routes.mjs, because link scrapers do not run JS. Both are
+      also swapped at runtime by src/i18n/meta.ts, which is what follows the
+      language toggle once React is up.
     -->
     <title>Alycia Gautier — Développeuse Front-End React &amp; TypeScript</title>
     <meta
       name="description"
-      content="Développeuse front-end, deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d'un CDI à partir de septembre 2026, Paris ou télétravail."
+      content="Développeuse front-end, deux ans d’interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d’un CDI à partir de septembre 2026, Paris ou télétravail."
     />
     <meta name="author" content="Alycia Gautier" />
     <meta name="theme-color" content="#171715" />
@@ -51,11 +56,70 @@
     <meta name="twitter:image" content="https://portfolio-topaz-zeta-15.vercel.app/og-card.png" />
     <meta name="twitter:image:alt" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Person schema. og:type is already "profile"; this is the structured
+      equivalent search engines actually read. Swapped for the cyber
+      positioning by the prerender step in vite.config.ts.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "url": "https://portfolio-topaz-zeta-15.vercel.app/",
+        "mainEntity": {
+          "@type": "Person",
+          "name": "Alycia Gautier",
+          "jobTitle": "Développeuse Front-End",
+          "url": "https://portfolio-topaz-zeta-15.vercel.app/",
+          "email": "mailto:alycia.gautier@laposte.net",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Paris",
+            "addressCountry": "FR"
+          },
+          "knowsLanguage": ["fr", "en"],
+          "knowsAbout": [
+            "React",
+            "TypeScript",
+            "JavaScript",
+            "Vue.js",
+            "Tailwind CSS",
+            "HTML",
+            "CSS",
+            "Jest",
+            "Accessibilité web"
+          ],
+          "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "École 42"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/alycia-gautier/",
+            "https://github.com/Aceep"
+          ]
+        }
+      }
+    </script>
+
+    <!--
+      Fonts are self-hosted (scripts/vendor-fonts.mjs writes src/styles/fonts.css).
+      Linking fonts.googleapis.com here meant a render-blocking stylesheet on a
+      third-party origin — DNS, TLS and a round trip before first paint.
+      These two carry the headings and every mono label, so they are preloaded.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/syne-800-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/space-mono-400-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
   </head>
   <body>

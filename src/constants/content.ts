@@ -111,7 +111,7 @@ const PROJECTS_META: ProjectMeta[] = [
     tags: ['React', 'Ethereum', 'Smart Contracts'],
     link: 'https://kyle-nft-9wih.vercel.app/',
     category: 'school',
-    preview: '/media/projects/nft-kyle-preview.jpg',
+    preview: '/media/projects/nft-kyle-preview.webp',
   },
   {
     id: 'mes-collections',
@@ -133,7 +133,7 @@ const PROJECTS_META: ProjectMeta[] = [
     tags: ['JavaScript', 'ThreeJS', 'CSS'],
     link: 'https://game-three-fawn.vercel.app/',
     category: 'school',
-    preview: '/media/projects/3d-pong-preview.png',
+    preview: '/media/projects/3d-pong-preview.webp',
   },
   {
     id: 'shifumi-game',
@@ -141,7 +141,7 @@ const PROJECTS_META: ProjectMeta[] = [
     tags: ['React', 'CSS', 'Game Logic'],
     link: 'https://shifumi-psi.vercel.app/',
     category: 'school',
-    preview: '/media/projects/shifumi-preview.png',
+    preview: '/media/projects/shifumi-preview.webp',
   },
   {
     id: 'annabeth-library',
@@ -149,7 +149,7 @@ const PROJECTS_META: ProjectMeta[] = [
     tags: ['JavaScript', 'CSS', 'Community'],
     link: 'https://annabeth-library.vercel.app/',
     category: 'personal',
-    preview: '/media/projects/annabeth-library-preview.jpg',
+    preview: '/media/projects/annabeth-library-preview.webp',
   },
   {
     id: 'playmakers-professional',
@@ -198,22 +198,22 @@ const VIDEOS_META: Array<{ id: string; filename: string; poster?: string }> = [
   {
     id: 'retardement',
     filename: 'A_RETARDEMENT_1.mp4',
-    poster: '/media/videos/A_RETARDEMENT_1.jpg',
+    poster: '/media/videos/A_RETARDEMENT_1.webp',
   },
   {
     id: 'golden-sheep',
     filename: 'FD-GoldenSheep_1_1.mp4',
-    poster: '/media/videos/FD-GoldenSheep_1_1.jpg',
+    poster: '/media/videos/FD-GoldenSheep_1_1.webp',
   },
   {
     id: 'moi-assassin',
     filename: 'FL-Moi_Assassin.mp4',
-    poster: '/media/videos/FL-Moi_Assassin.jpg',
+    poster: '/media/videos/FL-Moi_Assassin.webp',
   },
   {
     id: 'trois-femmes',
     filename: 'TroisFemmesDisparaissent_2_1.mp4',
-    poster: '/media/videos/TroisFemmesDisparaissent_2_1.jpg',
+    poster: '/media/videos/TroisFemmesDisparaissent_2_1.webp',
   },
 ];
 
@@ -968,14 +968,32 @@ const CASE_STUDIES: Record<Lang, Record<string, CaseStudy>> = {
 /*  Assembly — resolve a full single-language, single-profile bundle          */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Resolve a lookup that the tables are expected to satisfy, or fail loudly.
+ *
+ * The tables are keyed by plain strings, so a typo resolves to `undefined` and
+ * would otherwise render as a blank line. Throwing here matches how
+ * PROJECT_ORDER already handles an unknown id: break at startup, where the
+ * tests catch it, rather than ship a hole.
+ */
+function required<T>(value: T | undefined, what: string): T {
+  if (value === undefined) {
+    throw new Error(`content: missing ${what}`);
+  }
+  return value;
+}
+
 export function getContent(lang: Lang, profile: Profile): LocalizedContent {
-  const skills: Skill[] = SKILLS_META[profile].map((meta) => ({
-    id: meta.id,
-    icon: meta.icon,
-    group: meta.group,
-    name: SKILL_TEXT[lang][meta.id].name,
-    label: SKILL_TEXT[lang][meta.id].label,
-  }));
+  const skills: Skill[] = SKILLS_META[profile].map((meta) => {
+    const text = required(SKILL_TEXT[lang][meta.id], `SKILL_TEXT.${lang}.${meta.id}`);
+    return {
+      id: meta.id,
+      icon: meta.icon,
+      group: meta.group,
+      name: text.name,
+      label: text.label,
+    };
+  });
 
   const byId = new Map(PROJECTS_META.map((meta) => [meta.id, meta]));
 
@@ -989,24 +1007,30 @@ export function getContent(lang: Lang, profile: Profile): LocalizedContent {
     return {
       ...meta,
       number: String(index + 1).padStart(3, '0'),
-      description: PROJECT_DESC[profile][lang][id],
+      description: required(
+        PROJECT_DESC[profile][lang][id],
+        `PROJECT_DESC.${profile}.${lang}.${id}`
+      ),
     };
   });
 
-  const videos: Video[] = VIDEOS_META.map((meta) => ({
-    id: meta.id,
-    filename: meta.filename,
-    poster: meta.poster,
-    title: VIDEO_TEXT[lang][meta.id].title,
-    description: VIDEO_TEXT[lang][meta.id].description,
-  }));
+  const videos: Video[] = VIDEOS_META.map((meta) => {
+    const text = required(VIDEO_TEXT[lang][meta.id], `VIDEO_TEXT.${lang}.${meta.id}`);
+    return {
+      id: meta.id,
+      filename: meta.filename,
+      poster: meta.poster,
+      title: text.title,
+      description: text.description,
+    };
+  });
 
   const contactLinks: ContactLink[] = CONTACT_META.map((meta) => ({
     id: meta.id,
     url: meta.id === 'cv' ? CV_URL[profile] : meta.url,
     external: meta.external,
-    label: CONTACT_LABEL[lang][meta.id],
-    cta: CONTACT_CTA[lang][meta.id],
+    label: required(CONTACT_LABEL[lang][meta.id], `CONTACT_LABEL.${lang}.${meta.id}`),
+    cta: required(CONTACT_CTA[lang][meta.id], `CONTACT_CTA.${lang}.${meta.id}`),
   }));
 
   return {

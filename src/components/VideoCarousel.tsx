@@ -34,6 +34,10 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, ui }) => {
     void videoRef.current?.play();
   };
 
+  // Nothing to show is not an error, but reading videos[0] as if there were
+  // would be: every field below assumes a selected clip exists.
+  if (!selectedVideo) return null;
+
   return (
     <div className="video-carousel">
       <div className="video-player">

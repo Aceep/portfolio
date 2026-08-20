@@ -57,12 +57,16 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
         <div className="hero-glow"></div>
 
         {/* Kyle mascot */}
+        {/* The LCP element on most visits, so it is fetched ahead of the
+            rest rather than queued behind the bundle. */}
         <img
           src="/Kyle.png"
           alt=""
           className="hero-kyle"
           width={455}
           height={548}
+          fetchPriority="high"
+          decoding="async"
         />
 
         {/* Spinning badge */}
@@ -75,9 +79,9 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
               />
             </defs>
             <text
+              className="hero-badge-text"
               fontFamily="Space Mono, monospace"
               fontSize="9.5"
-              fill="#444"
               letterSpacing="3"
             >
               <textPath href="#circle-text">{ui.heroBadge}</textPath>

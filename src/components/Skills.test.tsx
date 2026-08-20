@@ -63,9 +63,11 @@ describe('Skills', () => {
     const cards = Array.from(container.querySelectorAll<HTMLElement>('.skill-card'));
     expect(cards).toHaveLength(SKILLS.length);
 
-    cards.forEach((card, index) => {
-      expect(within(card).getByText(SKILLS[index].name)).toBeInTheDocument();
-      expect(within(card).getByText(SKILLS[index].label)).toBeInTheDocument();
+    SKILLS.forEach((skill, index) => {
+      const card = cards[index];
+      expect(card).toBeDefined();
+      expect(within(card as HTMLElement).getByText(skill.name)).toBeInTheDocument();
+      expect(within(card as HTMLElement).getByText(skill.label)).toBeInTheDocument();
     });
   });
 });

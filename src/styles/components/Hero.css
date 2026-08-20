@@ -65,21 +65,31 @@
   -webkit-text-stroke: 1.5px var(--muted);
 }
 
+/*
+ * Outlined display type is the intended look, but it thins out badly at high
+ * zoom and for anyone who has asked for more contrast. Fill it for them.
+ */
+@media (prefers-contrast: more) {
+  .hero-name .outline {
+    color: var(--muted-strong);
+    -webkit-text-stroke: 0;
+  }
+}
+
+/*
+ * The badge ran at #444 — roughly 1.9:1 against the page, i.e. text nobody
+ * could read. It is decorative, but decorative is not a reason to be invisible.
+ */
+.hero-badge-text {
+  fill: var(--muted);
+}
+
 .hero-value {
   font-size: var(--text-xl);
   line-height: 1.15;
   letter-spacing: -0.6px;
   max-width: 540px;
   margin-bottom: 1rem;
-}
-
-.hero-desc {
-  font-family: 'Space Mono', monospace;
-  font-size: var(--text-sm);
-  line-height: 1.8;
-  color: var(--muted-strong);
-  max-width: 500px;
-  margin-bottom: 2rem;
 }
 
 .hero-ctas {
@@ -175,18 +185,6 @@
   object-fit: contain;
 }
 
-.hero-year-tag {
-  position: absolute;
-  bottom: 3rem;
-  right: 3rem;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 2px;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
 .hero-badge {
   position: absolute;
   top: 6rem;
@@ -242,12 +240,6 @@
     margin-bottom: 0.8rem;
   }
 
-  .hero-desc {
-    font-size: 12px;
-    margin-bottom: 1.5rem;
-    max-width: 100%;
-  }
-
   .hero-ctas {
     flex-direction: column;
     gap: 0.75rem;
@@ -296,9 +288,6 @@
     height: 60px;
   }
 
-  .hero-year-tag {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -323,12 +312,6 @@
 
   .hero-value {
     font-size: 1.15rem;
-  }
-
-  .hero-desc {
-    font-size: 12px;
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
   }
 
   .hero-right {

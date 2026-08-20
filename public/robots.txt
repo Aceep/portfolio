@@ -1,0 +1,5 @@
+# Both positionings are meant to be found.
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-topaz-zeta-15.vercel.app/sitemap.xml

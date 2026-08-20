@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-Render public/og-card.png — the 1200x630 image link previews use.
+Render the 1200x630 images link previews use — one per positioning:
+
+    public/og-card.png        served on /
+    public/og-card-cyber.png  served on /cyber
 
 Falls back to DejaVu, which every Linux box has. For a card that matches the
 site exactly, drop Syne-Bold.ttf and SpaceMono-Regular/Bold.ttf into
@@ -23,12 +26,25 @@ BG, SURFACE = (23, 23, 21), (32, 32, 30)
 YELLOW, TEXT, MUTED, BORDER = (224, 177, 77), (248, 244, 234), (184, 180, 170), (76, 75, 70)
 GHOST = (70, 69, 64)
 
-# Site copy — keep in sync with PORTFOLIO.frontend.fr in src/constants/content.ts
-KICKER = "// DÉVELOPPEUSE FRONT-END"
 FIRST, LAST = "ALYCIA", "GAUTIER"
-VALUE = ["Deux ans d’interfaces React & Vue", "livrées en production."]
-CHIPS = ["REACT", "TYPESCRIPT", "VUE", "TAILWIND"]
-AVAILABILITY = "CDI · SEPTEMBRE 2026 · PARIS / REMOTE"
+
+# Site copy — keep in sync with PORTFOLIO.<profile>.fr in src/constants/content.ts.
+# One entry per positioning: scrapers do not run JS, so each route needs its own
+# card rather than the runtime meta swap in src/i18n/meta.ts.
+CARDS = {
+    "og-card.png": {
+        "kicker": "// DÉVELOPPEUSE FRONT-END",
+        "value": ["Deux ans d’interfaces React & Vue", "livrées en production."],
+        "chips": ["REACT", "TYPESCRIPT", "VUE", "TAILWIND"],
+        "availability": "CDI · SEPTEMBRE 2026 · PARIS / REMOTE",
+    },
+    "og-card-cyber.png": {
+        "kicker": "// DÉVELOPPEUSE → CYBERSÉCURITÉ",
+        "value": ["Développeuse front-end,", "en spécialisation cybersécurité."],
+        "chips": ["LINUX", "RÉSEAU", "REVERSE", "GDB"],
+        "availability": "ALTERNANCE · SEPTEMBRE 2026",
+    },
+}
 
 
 def font(preferred: str, fallback: str, size: int) -> ImageFont.FreeTypeFont:
@@ -38,7 +54,7 @@ def font(preferred: str, fallback: str, size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(path), size)
 
 
-def main() -> None:
+def render(filename: str, card: dict) -> None:
     display_b = lambda s: font("Syne-Bold.ttf", "DejaVuSans-Bold.ttf", s)
     mono = lambda s: font("SpaceMono-Regular.ttf", "DejaVuSansMono.ttf", s)
     mono_b = lambda s: font("SpaceMono-Bold.ttf", "DejaVuSansMono-Bold.ttf", s)
@@ -56,17 +72,17 @@ def main() -> None:
         d.ellipse([980 - r, 300 - r, 980 + r, 300 + r], fill=(*YELLOW, alpha))
 
     x = 80
-    d.text((x, 92), KICKER, font=mono_b(24), fill=YELLOW)
+    d.text((x, 92), card["kicker"], font=mono_b(24), fill=YELLOW)
     d.text((x, 148), FIRST, font=display_b(96), fill=TEXT)
     d.text((x, 248), LAST, font=display_b(96), fill=GHOST)
     d.line([(x, 380), (x + 110, 380)], fill=YELLOW, width=4)
 
-    for i, line in enumerate(VALUE):
+    for i, line in enumerate(card["value"]):
         d.text((x, 412 + i * 44), line, font=display_b(32), fill=TEXT)
 
     chip_font = mono_b(18)
     cx = x
-    for chip in CHIPS:
+    for chip in card["chips"]:
         w = d.textlength(chip, font=chip_font)
         d.rounded_rectangle([cx, 522, cx + w + 32, 562], radius=20,
                             outline=BORDER, width=2, fill=SURFACE)
@@ -74,8 +90,9 @@ def main() -> None:
         cx += w + 44
 
     avail_font = mono(19)
-    d.text((W - 80 - d.textlength(AVAILABILITY, font=avail_font), 537),
-           AVAILABILITY, font=avail_font, fill=MUTED)
+    availability = card["availability"]
+    d.text((W - 80 - d.textlength(availability, font=avail_font), 537),
+           availability, font=avail_font, fill=MUTED)
 
     mascot = Image.open(ROOT / "public" / "Kyle.png").convert("RGBA")
     height = 400
@@ -84,9 +101,14 @@ def main() -> None:
 
     d.rectangle([0, 0, 9, H], fill=YELLOW)
 
-    out = ROOT / "public" / "og-card.png"
+    out = ROOT / "public" / filename
     img.save(out, optimize=True)
     print(f"wrote {out.relative_to(ROOT)} ({out.stat().st_size // 1024} KB)")
+
+
+def main() -> None:
+    for filename, card in CARDS.items():
+        render(filename, card)
 
 
 if __name__ == "__main__":

@@ -74,6 +74,8 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
     }
 
     const nextFilter = filterOptions[nextIndex];
+    if (!nextFilter) return;
+
     setActiveFilter(nextFilter.key);
     filterButtonRefs.current[nextIndex]?.focus();
   };
