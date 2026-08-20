@@ -1,0 +1,26 @@
+{
+  "frontend": {
+    "fr": {
+      "title": "Alycia Gautier — Développeuse Front-End React & TypeScript",
+      "description": "Développeuse front-end, deux ans d’interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d’un CDI à partir de septembre 2026, Paris ou télétravail.",
+      "ogImage": "/og-card.png"
+    },
+    "en": {
+      "title": "Alycia Gautier — Front-End Developer, React & TypeScript",
+      "description": "Front-end developer with two years shipping production React, TypeScript, Vue and Tailwind interfaces. Looking for a full-time role from September 2026, Paris or remote.",
+      "ogImage": "/og-card.png"
+    }
+  },
+  "cyber": {
+    "fr": {
+      "title": "Alycia Gautier — Développeuse → Cybersécurité · Alternance 2026",
+      "description": "Développeuse front-end en spécialisation cybersécurité (Master Sécurité & Administration Réseau). En recherche d’alternance pour septembre 2026 : réseau, Linux, reverse engineering.",
+      "ogImage": "/og-card-cyber.png"
+    },
+    "en": {
+      "title": "Alycia Gautier — Developer → Cybersecurity · Apprenticeship 2026",
+      "description": "Front-end developer specialising in cybersecurity (Master’s in Security & Network Administration). Looking for a September 2026 apprenticeship: networking, Linux, reverse engineering.",
+      "ogImage": "/og-card-cyber.png"
+    }
+  }
+}
