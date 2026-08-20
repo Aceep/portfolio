@@ -59,7 +59,6 @@
   color: var(--muted);
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  /* Carries the evidence now that the level bar is gone, so it gets room. */
   margin-top: 0.55rem;
   line-height: 1.5;
 }

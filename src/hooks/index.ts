@@ -3,10 +3,6 @@ import { useEffect, useRef } from 'react';
 /** What the cursor grows over. Matched per event, not snapshotted. */
 const INTERACTIVE = 'a, button, .project-card, .skill-card, .contact-link';
 
-/**
- * Custom mouse cursor tracking hook
- * Tracks cursor position and manages hover states for interactive elements
- */
 export const useCursorTracker = () => {
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
@@ -20,10 +16,7 @@ export const useCursorTracker = () => {
       return;
     }
 
-    // Position is written once per frame via the independent `translate`
-    // property: setting left/top per mousemove laid out the page on every
-    // pointer event, and writing `transform` here would clobber the centring
-    // and the .big scale that Cursor.css owns.
+    // `translate`, not `transform`: Cursor.css owns transform (centring, .big).
     let frame = 0;
     let x = 0;
     let y = 0;
@@ -41,12 +34,7 @@ export const useCursorTracker = () => {
       }
     };
 
-    /*
-     * Delegated rather than bound to a snapshot of the matching nodes. The
-     * previous version queried once on mount, so every card remounted by the
-     * project filter — and everything inside the case-study modal — arrived
-     * without handlers, and the cursor quietly stopped reacting.
-     */
+    // Delegated: cards and modal content mount after this hook runs.
     const handleOver = (event: MouseEvent) => {
       if ((event.target as Element | null)?.closest?.(INTERACTIVE)) {
         cursor.classList.add('big');

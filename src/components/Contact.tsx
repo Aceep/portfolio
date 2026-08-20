@@ -10,9 +10,6 @@ interface ContactProps {
   label: string;
 }
 
-/**
- * Contact section with call-to-action and contact links
- */
 export const Contact: React.FC<ContactProps> = ({
   title,
   description,

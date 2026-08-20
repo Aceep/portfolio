@@ -10,11 +10,7 @@
   animation: fadeIn 280ms var(--ease-standard);
 }
 
-/*
- * Full-bleed dismiss target sitting behind the dialog. Transparent and
- * borderless: it is the backdrop, visually — it just happens to be a real
- * button so the click handler lives on something focusable-by-nature.
- */
+/* backdrop is a real button so the dismiss handler is focusable */
 .modal-backdrop-dismiss {
   position: absolute;
   inset: 0;
@@ -230,7 +226,6 @@
   text-transform: uppercase;
 }
 
-/* Scrollbar styling */
 .modal-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -248,7 +243,6 @@
   background: var(--yellow);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .modal-container {
     width: 95%;
@@ -357,8 +351,6 @@
   }
 }
 
-
-/* Headline numbers, read before the prose is read at all. */
 .modal-metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));

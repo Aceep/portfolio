@@ -7,14 +7,7 @@ interface VideoCarouselProps {
   ui: UIStrings;
 }
 
-/**
- * Short-film carousel.
- *
- * Only the selected clip is ever mounted as a <video>, and nothing is fetched
- * until the visitor presses play (`preload="none"`): the source files are the
- * heaviest assets on the page, so the thumbnail strip uses poster images
- * rather than a second set of media elements.
- */
+// Only the selected clip is mounted as <video>, and nothing loads before play.
 export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, ui }) => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -34,20 +27,12 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, ui }) => {
     void videoRef.current?.play();
   };
 
-  // Nothing to show is not an error, but reading videos[0] as if there were
-  // would be: every field below assumes a selected clip exists.
   if (!selectedVideo) return null;
 
   return (
     <div className="video-carousel">
       <div className="video-player">
-        {/*
-          No <track> yet: these are the original short films and captioning
-          them means transcribing the dialogue, not generating a stub. Shipping
-          an empty caption track would satisfy the linter while telling a
-          screen-reader user a caption exists when it does not. Tracked in the
-          README's known limitations.
-        */}
+        {/* No <track> yet: needs real transcripts (see README limitations). */}
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
           ref={videoRef}
@@ -64,8 +49,7 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, ui }) => {
           onEnded={() => setIsPlaying(false)}
         />
 
-        {/* Poster overlay — also the only thing standing between the visitor
-            and a multi-megabyte download, so it stays until they opt in. */}
+        {/* Poster overlay, kept until the visitor opts into the download. */}
         {!isPlaying && (
           <button className="video-overlay" onClick={handlePlay} aria-label={`Play ${selectedVideo.title}`}>
             <span className="play-button" aria-hidden="true">

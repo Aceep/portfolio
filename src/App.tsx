@@ -15,9 +15,6 @@ import {
 import { useLanguage } from './i18n/LanguageContext';
 import './styles/App.css';
 
-/**
- * Main App component - Orchestrates all page sections
- */
 function App() {
   const { c } = useLanguage();
   const {
@@ -67,9 +64,6 @@ function App() {
 
       <Cursor />
 
-      {/* First stop for a keyboard user: the nav is fixed and this is a
-          single-page site, so without it every visit starts by tabbing the
-          whole menu. */}
       <a className="skip-link" href="#main">
         {ui.skipToContent}
       </a>

@@ -9,9 +9,6 @@ interface VideosProps {
   ui: UIStrings;
 }
 
-/**
- * Videos section - creative side (short-film editing)
- */
 export const Videos: React.FC<VideosProps> = ({ videos, ui }) => {
   return (
     <section id="videos" aria-labelledby="videos-heading">

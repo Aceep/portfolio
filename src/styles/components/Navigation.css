@@ -152,12 +152,7 @@
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
-    /*
-      `visibility: hidden` is what takes the links out of the tab order. With
-      transform + opacity alone they are merely off-screen: still focusable,
-      still announced, so a keyboard user tabbed through five invisible links
-      before reaching the page. Delayed so the close transition still plays.
-    */
+    /* visibility: hidden removes the links from the tab order, delayed for the close transition */
     visibility: hidden;
     transition: transform var(--motion-base) var(--ease-standard),
       opacity var(--motion-base) var(--ease-standard),
@@ -222,7 +217,6 @@
   }
 }
 
-/* Right-side cluster: language toggle + availability badge */
 .nav-actions {
   display: flex;
   align-items: center;

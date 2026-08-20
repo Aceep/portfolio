@@ -9,8 +9,7 @@ import type { Project } from '../types';
 const content = getContent('fr', 'frontend');
 const { ui } = content;
 
-// `playmakers-professional` is the id the real case-study table is keyed by,
-// so the modal renders actual content rather than the fallback.
+// id matches a real case study so the modal renders content.
 const PLAYMAKERS: Project = {
   id: 'playmakers-professional',
   number: '001',
@@ -45,20 +44,18 @@ const tab = (name: RegExp) => screen.getByRole('tab', { name });
 
 describe('Projects', () => {
   beforeEach(() => {
-    // The provider now honours the browser locale on a first visit, and jsdom
-    // reports en-US. These assertions are written against the French bundle,
-    // so state the choice explicitly rather than depending on the default.
+    // jsdom reports en-US; assertions use the French bundle.
     localStorage.setItem('portfolio-lang', 'fr');
   });
 
-  it('shows every project under the default filter', () => {
+  it('shows all projects by default', () => {
     renderProjects();
 
     expect(within(grid()).getByText('PlayMakers')).toBeInTheDocument();
     expect(within(grid()).getByText('Shifumi')).toBeInTheDocument();
   });
 
-  it('counts each category on its filter', () => {
+  it('shows a count on each filter', () => {
     renderProjects();
 
     expect(tab(new RegExp(ui.filterAll))).toHaveTextContent('2');
@@ -66,7 +63,7 @@ describe('Projects', () => {
     expect(tab(new RegExp(ui.filterTechnical))).toHaveTextContent('0');
   });
 
-  it('narrows the grid to the selected category', async () => {
+  it('filters by category', async () => {
     const user = userEvent.setup();
     renderProjects();
 
@@ -76,9 +73,7 @@ describe('Projects', () => {
     expect(within(grid()).queryByText('PlayMakers')).not.toBeInTheDocument();
   });
 
-  // Regression: an empty filter used to return null for the whole section,
-  // taking the filter bar with it and stranding the visitor.
-  it('keeps the filters reachable when a category is empty', async () => {
+  it('keeps the filter bar when a category is empty', async () => {
     const user = userEvent.setup();
     renderProjects();
 
@@ -91,7 +86,7 @@ describe('Projects', () => {
     expect(within(grid()).getByText('PlayMakers')).toBeInTheDocument();
   });
 
-  it('moves between filters with the arrow keys', async () => {
+  it('supports arrow key navigation between filters', async () => {
     const user = userEvent.setup();
     renderProjects();
 
@@ -106,7 +101,7 @@ describe('Projects', () => {
     expect(tab(new RegExp(ui.filterTechnical))).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('links straight out for projects without a case study', () => {
+  it('links externally for projects with a link', () => {
     renderProjects();
 
     const link = screen.getByRole('link', { name: /Shifumi/ });
@@ -114,7 +109,7 @@ describe('Projects', () => {
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
-  it('opens the case study for projects that have one, and closes on Escape', async () => {
+  it('opens the case study modal and closes on Escape', async () => {
     const user = userEvent.setup();
     renderProjects();
 
@@ -133,9 +128,7 @@ describe('Projects', () => {
     expect(document.body).not.toHaveStyle({ overflow: 'hidden' });
   });
 
-  // Regression: the dialog used to leave focus wherever it was, so Tab walked
-  // straight out into the page behind it and closing dropped focus on <body>.
-  it('moves focus into the case study, keeps it there, and hands it back', async () => {
+  it('traps focus in the modal and restores it on close', async () => {
     const user = userEvent.setup();
     renderProjects();
 
@@ -146,8 +139,6 @@ describe('Projects', () => {
     const close = within(dialog).getByRole('button', { name: content.ui.closeModalLabel });
     expect(close).toHaveFocus();
 
-    // The close button is the only focusable element in the dialog, so Tab in
-    // either direction has to come back to it rather than escaping.
     await user.tab();
     expect(dialog).toContainElement(document.activeElement as HTMLElement);
 
@@ -160,27 +151,26 @@ describe('Projects', () => {
     expect(opener).toHaveFocus();
   });
 
-  it('labels the close control in the active language', async () => {
+  it('labels the close button in the active language', async () => {
     const user = userEvent.setup();
     renderProjects();
 
     await user.click(screen.getByRole('button', { name: /PlayMakers/ }));
 
-    // French bundle: the label used to be hardcoded English.
     expect(content.ui.closeModalLabel).toBe('Fermer la fenêtre');
     expect(
       within(screen.getByRole('dialog')).getByRole('button', { name: 'Fermer la fenêtre' })
     ).toBeInTheDocument();
   });
 
-  it('renders a project with no link as plain content, not a broken link', () => {
+  it('renders unlinked projects without an anchor', () => {
     renderProjects([{ ...SHIFUMI, link: undefined }]);
 
     expect(screen.queryByRole('link', { name: /Shifumi/ })).not.toBeInTheDocument();
     expect(within(grid()).getByText('Shifumi')).toBeInTheDocument();
   });
 
-  it('falls back to a placeholder when a modal project has no case study', async () => {
+  it('shows a placeholder when no case study exists', async () => {
     const user = userEvent.setup();
     renderProjects([{ ...PLAYMAKERS, id: 'not-written-yet' }]);
 

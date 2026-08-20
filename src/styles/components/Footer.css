@@ -16,7 +16,6 @@ footer {
   text-transform: uppercase;
 }
 
-/* Cross-link to the other positioning (front-end ↔ cybersecurity). */
 .footer-profile-link {
   font-family: 'Space Mono', monospace;
   font-size: var(--text-2xs);

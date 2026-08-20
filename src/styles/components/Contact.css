@@ -33,7 +33,6 @@
   max-width: 46ch;
 }
 
-/* Detached rows: each contact link is its own card. */
 .contact-right {
   display: flex;
   flex-direction: column;
@@ -98,7 +97,6 @@
   overflow-wrap: anywhere;
 }
 
-/* Call to action — muted until the row is hovered or focused. */
 .cl-cta {
   display: inline-flex;
   align-items: center;

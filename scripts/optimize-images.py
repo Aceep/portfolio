@@ -1,18 +1,6 @@
 #!/usr/bin/env python3
-"""
-Re-encode the preview screenshots and video posters as WebP.
-
-    python3 scripts/optimize-images.py
-
-The screenshots were stored as PNG — a lossless format for photographic UI
-captures, which is why 3d-pong-preview.png was 396 KB for a 1280x720 image.
-WebP at q82 is visually indistinguishable here and roughly a fifth of the size.
-
-Originals are left in place; they are the sources ffmpeg and the screenshots
-came from. Only the WebP files are referenced by the site.
-
-Requires Pillow.
-"""
+"""Re-encode public/media PNG/JPG as WebP (originals kept). Requires Pillow.
+Run: python3 scripts/optimize-images.py"""
 from pathlib import Path
 
 from PIL import Image

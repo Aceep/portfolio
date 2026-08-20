@@ -45,7 +45,6 @@
   padding: 0.4rem 0.65rem;
 }
 
-/* Detached card grid: real gutters, every card owns its border. */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -241,7 +240,6 @@
   gap: 8px;
 }
 
-/* Call to action — always present but muted; ignites on hover/focus. */
 .project-cta {
   margin-top: auto;
   padding-top: 1.4rem;
@@ -301,7 +299,7 @@
   transform: translate(5px, -5px);
 }
 
-/* Corner texture — kept well clear of the CTA row so only a thin arc reads. */
+/* corner arc, offset so it stays clear of the CTA row */
 .project-accent {
   position: absolute;
   bottom: -78px;
@@ -427,7 +425,7 @@
   }
 }
 
-/* Empty state — shown in place of the cards so the filter bar stays reachable. */
+/* empty state, rendered inside the grid so the filter bar stays */
 .projects-empty {
   grid-column: 1 / -1;
   padding: 3rem 0;

@@ -1,10 +1,5 @@
 @import './fonts.css';
 
-/**
- * Global application styles
- * Includes CSS variables, resets, and base styling
- */
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -28,8 +23,7 @@
   --muted-strong: #DFD8CA;
   --border: #4C4B46;
 
-  /* Type scale — every step is fluid between mobile and desktop.
-     Cards read from --text-2xs .. --text-lg; headings use --text-xl / --text-2xl. */
+  /* fluid type scale */
   --text-2xs: clamp(0.72rem, 0.69rem + 0.15vw, 0.8rem);
   --text-xs: clamp(0.8rem, 0.76rem + 0.2vw, 0.9rem);
   --text-sm: clamp(0.88rem, 0.83rem + 0.26vw, 1rem);
@@ -38,7 +32,7 @@
   --text-xl: clamp(1.6rem, 1.35rem + 1.1vw, 2.4rem);
   --text-2xl: clamp(1.85rem, 1.5rem + 1.3vw, 2.75rem);
 
-  /* Card surfaces — detached cards: own border, radius, elevation. */
+  /* card surfaces */
   --card-radius: 12px;
   --card-gap: 1.5rem;
   --card-bg: var(--surface);
@@ -78,7 +72,7 @@ body {
   text-transform: uppercase;
   text-decoration: none;
   border-bottom-right-radius: 6px;
-  /* Off-screen rather than display:none, so it stays focusable. */
+  /* off-screen, not display:none, so it stays focusable */
   transform: translateY(-120%);
   transition: transform var(--motion-fast) var(--ease-standard);
 }
@@ -120,12 +114,7 @@ button:focus-visible {
 }
 
 @media (hover: none), (pointer: coarse) {
-  /*
-    The custom cursor element is hidden for these users (see
-    useCursorTracker), so every `cursor: none` has to be handed back — not
-    just the one on body. Missing the component-level rules left reduced-motion
-    visitors with no pointer at all over any button.
-  */
+  /* custom cursor is hidden here (useCursorTracker), restore every cursor: none */
   body,
   a,
   button,
@@ -182,12 +171,7 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 
-  /*
-    The custom cursor element is hidden for these users (see
-    useCursorTracker), so every `cursor: none` has to be handed back — not
-    just the one on body. Missing the component-level rules left reduced-motion
-    visitors with no pointer at all over any button.
-  */
+  /* custom cursor is hidden here (useCursorTracker), restore every cursor: none */
   body,
   a,
   button,

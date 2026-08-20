@@ -13,10 +13,6 @@ interface ProjectsProps {
   ui: UIStrings;
 }
 
-/**
- * Projects grid showcasing portfolio work
- * Can be filtered by category (personal, school, professional)
- */
 export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [selectedModalProject, setSelectedModalProject] = useState<string | null>(null);
@@ -80,19 +76,21 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
     filterButtonRefs.current[nextIndex]?.focus();
   };
 
-  /**
-   * Inner card body, shared by the modal (button) and external-link (anchor)
-   * variants so the call to action only has to be described once.
-   */
+  // Shared by the button (modal) and anchor (external link) variants.
   const renderCardBody = (project: Project, ctaLabel: string | null) => (
     <>
-      <ProjectGallery
-        preview={project.preview}
-        confidential={project.category === 'professional'}
-        confidentialLabel={ui.projectConfidential}
-        confidentialNote={ui.projectConfidentialNote}
-      />
+      <ProjectGallery preview={project.preview} />
       <div className="project-content">
+        {/* Client work has no screenshot; say so instead of leaving a gap. */}
+        {project.category === 'professional' && (
+          <div className="project-confidential">
+            <span className="project-confidential-glyph" aria-hidden="true">
+              ⬡
+            </span>
+            <span className="project-confidential-label">{ui.projectConfidential}</span>
+          </div>
+        )}
+
         <div className="project-cover-header">
           <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
           <div className="project-category">{getCategoryLabel(project.category)}</div>
@@ -152,12 +150,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
           ))}
         </div>
 
-        {/*
-          No aria-live here: the count above is already a polite live region,
-          and two of them announced every filter change twice. `tabIndex={0}`
-          makes the panel itself reachable once the tabs are left, which is
-          what the tab pattern expects.
-        */}
+        {/* No aria-live here: the count above already announces changes. */}
         <div
           key={activeFilter}
           className="projects-grid"
@@ -192,9 +185,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
               </div>
             );
 
-            // A card with nowhere to go is not a link. Rendering an <a> with no
-            // href and killing it with pointer-events still shipped it to the
-            // accessibility tree as a broken link.
+            // No link: render a div, not an <a> without href.
             if (!project.link) {
               return (
                 <div key={project.id} className="project-card-link">

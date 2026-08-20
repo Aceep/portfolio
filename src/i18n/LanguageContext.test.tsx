@@ -26,21 +26,21 @@ describe('LanguageProvider', () => {
     vi.restoreAllMocks();
   });
 
-  it('keeps French for a French browser', () => {
+  it('defaults to French for French browsers', () => {
     withLanguages(['fr-FR', 'fr']);
     renderProbe();
 
     expect(screen.getByText('fr/frontend')).toBeInTheDocument();
   });
 
-  it('greets a non-French browser in English rather than making it hunt for the toggle', () => {
+  it('defaults to English for non-French browsers', () => {
     withLanguages(['en-GB', 'en']);
     renderProbe();
 
     expect(screen.getByText('en/frontend')).toBeInTheDocument();
   });
 
-  it('lets a stored choice win over the browser locale', () => {
+  it('prefers the stored language over the browser locale', () => {
     localStorage.setItem('portfolio-lang', 'fr');
     withLanguages(['en-US']);
     renderProbe();
@@ -48,7 +48,7 @@ describe('LanguageProvider', () => {
     expect(screen.getByText('fr/frontend')).toBeInTheDocument();
   });
 
-  it('falls back to French when the browser states no preference', () => {
+  it('falls back to French with no browser preference', () => {
     withLanguages([]);
     vi.spyOn(window.navigator, 'language', 'get').mockReturnValue('');
     renderProbe();

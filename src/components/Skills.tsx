@@ -5,19 +5,11 @@ import '../styles/components/Skills.css';
 
 interface SkillsProps {
   skills: Skill[];
-  /** Bands to render, in order — declared per positioning. */
+  /** Bands to render, in order, declared per positioning. */
   groups: SkillGroup[];
   ui: UIStrings;
 }
 
-/**
- * Skills section, split into the bands the active positioning declares
- * (front-end / tooling, or cyber / dev foundation).
- *
- * Each card states what backs the skill rather than a percentage: the bars
- * that used to live here were self-assigned, unfalsifiable, and had no
- * accessible value to expose.
- */
 export const Skills: React.FC<SkillsProps> = ({ skills, groups, ui }) => {
   return (
     <section id="skills" aria-labelledby="skills-heading">

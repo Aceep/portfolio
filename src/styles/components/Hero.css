@@ -65,10 +65,7 @@
   -webkit-text-stroke: 1.5px var(--muted);
 }
 
-/*
- * Outlined display type is the intended look, but it thins out badly at high
- * zoom and for anyone who has asked for more contrast. Fill it for them.
- */
+/* outlined text thins out at high zoom, fill it for prefers-contrast */
 @media (prefers-contrast: more) {
   .hero-name .outline {
     color: var(--muted-strong);
@@ -76,10 +73,6 @@
   }
 }
 
-/*
- * The badge ran at #444 — roughly 1.9:1 against the page, i.e. text nobody
- * could read. It is decorative, but decorative is not a reason to be invisible.
- */
 .hero-badge-text {
   fill: var(--muted);
 }
@@ -356,7 +349,6 @@
   }
 }
 
-/* Alternance banner — prominent apprenticeship call-out */
 .hero-alternance {
   display: inline-flex;
   align-items: center;

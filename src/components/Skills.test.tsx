@@ -18,7 +18,7 @@ const SKILLS: Skill[] = [
 ];
 
 describe('Skills', () => {
-  it('groups skills under the headings the profile declares', () => {
+  it('groups skills under their group headings', () => {
     render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
     expect(screen.getByRole('heading', { name: 'Cœur' })).toBeInTheDocument();
@@ -26,16 +26,14 @@ describe('Skills', () => {
     expect(screen.getByText('Git')).toBeInTheDocument();
   });
 
-  it('drops a heading whose group has no skills', () => {
+  it('skips empty groups', () => {
     render(<Skills skills={SKILLS.filter((s) => s.group === 'core')} groups={GROUPS} ui={ui} />);
 
     expect(screen.getByRole('heading', { name: 'Cœur' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Outils' })).not.toBeInTheDocument();
   });
 
-  // The section used to have no h2 at all: the label was a <div>, so the page
-  // jumped h1 -> h3 here and the <section> had no accessible name.
-  it('titles the section with a heading the region is named by', () => {
+  it('labels the section with its h2', () => {
     const { container } = render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
     const region = container.querySelector('#skills');
@@ -45,19 +43,17 @@ describe('Skills', () => {
     expect(region).toHaveAttribute('aria-labelledby', 'skills-heading');
   });
 
-  it('states the evidence behind each skill instead of a score', () => {
+  it('shows evidence text per skill', () => {
     const { container } = render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
     expect(screen.getByText('2 ans en production')).toBeInTheDocument();
     expect(screen.getByText('Versioning · Revue')).toBeInTheDocument();
 
-    // Regression: self-declared percentage bars carried no accessible value
-    // and no verifiable claim. Nothing should reintroduce them.
     expect(container.querySelector('.skill-level')).toBeNull();
     expect(container.querySelector('.skill-level-fill')).toBeNull();
   });
 
-  it('keeps every skill card readable as name plus evidence', () => {
+  it('renders name and label in each card', () => {
     const { container } = render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
     const cards = Array.from(container.querySelectorAll<HTMLElement>('.skill-card'));

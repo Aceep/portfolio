@@ -25,13 +25,13 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
     expect(missing).toEqual([]);
   });
 
-  it('puts every skill in a group the profile declares', () => {
+  it('assigns every skill to a declared group', () => {
     const declared = new Set(content.skillGroups.map((g) => g.key));
     const orphans = content.skills.filter((s) => !declared.has(s.group)).map((s) => s.id);
     expect(orphans).toEqual([]);
   });
 
-  it('renders no group heading with nothing under it', () => {
+  it('has no empty skill group', () => {
     const used = new Set(content.skills.map((s) => s.group));
     expect(content.skillGroups.filter((g) => !used.has(g.key))).toEqual([]);
   });
@@ -50,7 +50,7 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
     expect(unbacked).toEqual([]);
   });
 
-  it('offers the résumé that matches the positioning', () => {
+  it('uses the CV URL for the profile', () => {
     expect(content.cvUrl).toBe(CV_URL[profile]);
   });
 
@@ -59,9 +59,8 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
     expect(cvLink?.url).toBe(CV_URL[profile]);
   });
 
-  it('numbers the section labels contiguously, in page order', () => {
-    // Page order is fixed by App.tsx: About, Skills, Projects, Videos, Contact.
-    // Focus deliberately carries no number — it is a lead-in, not a section.
+  it('numbers section labels in page order', () => {
+    // Page order from App.tsx; Focus is unnumbered.
     const labels = [
       content.ui.aboutLabel,
       content.ui.skillsLabel,
@@ -72,12 +71,29 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
     expect(labels.map((label) => label.slice(0, 2))).toEqual(['01', '02', '03', '04', '05']);
   });
 
-  it('keeps every case-study metric well formed', () => {
+  it('has non-empty case-study metrics', () => {
     const malformed = Object.entries(content.caseStudies)
       .flatMap(([id, study]) => (study.metrics ?? []).map((metric) => ({ id, metric })))
       .filter(({ metric }) => !metric.value?.trim() || !metric.label?.trim())
       .map(({ id }) => id);
     expect(malformed).toEqual([]);
+  });
+
+  it('only cyber declares a cross-link, to /', () => {
+    if (profile === 'frontend') {
+      expect(content.ui.otherProfileLabel).toBeUndefined();
+      expect(content.ui.otherProfileHref).toBeUndefined();
+    } else {
+      expect(content.ui.otherProfileLabel).toBeTruthy();
+      expect(content.ui.otherProfileHref).toBe('/');
+    }
+  });
+
+  it('matches the degree level on the CV', () => {
+    // CV says Bac +4.
+    const master = content.experience.find((entry) => entry.id === 'master');
+    expect(master).toBeDefined();
+    expect(master?.role).not.toMatch(/Bac \+5|MSc/);
   });
 
   it('gives every video a poster and a title', () => {
@@ -87,7 +103,7 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
 });
 
 describe('getContent', () => {
-  it('keeps the two positionings genuinely distinct', () => {
+  it('front-end and cyber content differ', () => {
     const frontend = getContent('fr', 'frontend');
     const cyber = getContent('fr', 'cyber');
 

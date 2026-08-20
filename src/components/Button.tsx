@@ -10,9 +10,6 @@ interface ButtonProps {
   className?: string;
 }
 
-/**
- * Reusable button component with primary and secondary variants
- */
 export const Button: React.FC<ButtonProps> = ({
   variant,
   children,

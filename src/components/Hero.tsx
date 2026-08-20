@@ -10,9 +10,6 @@ interface HeroProps {
   cvUrl: string;
 }
 
-/**
- * Hero section - Large striking landing area with CTA buttons
- */
 export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
   const { name, tagline, heroJobTitle, heroValue, yearsExp, availabilityBanner, availabilityDetail } =
     portfolio;
@@ -56,9 +53,7 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
         <div className="hero-grid" aria-hidden="true"></div>
         <div className="hero-glow"></div>
 
-        {/* Kyle mascot */}
-        {/* The LCP element on most visits, so it is fetched ahead of the
-            rest rather than queued behind the bundle. */}
+        {/* Kyle mascot, usually the LCP element */}
         <img
           src="/Kyle.png"
           alt=""
@@ -66,9 +61,7 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
           width={455}
           height={548}
           decoding="async"
-          // React 18.2 does not map `fetchPriority` to an attribute and warns
-          // on it; the lowercase attribute is what the browser reads. Drop the
-          // spread when React is upgraded.
+          // React 18.2 warns on `fetchPriority`; drop the spread after upgrade.
           {...{ fetchpriority: 'high' }}
         />
 

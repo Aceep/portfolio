@@ -6,8 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    // `open` is deliberately off: the dev server also runs inside the container
-    // from docker-compose, where there is no browser to launch.
     open: false,
   },
   test: {
@@ -18,9 +16,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      // Set just under what the suite actually reaches. The point is to stop
-      // coverage sliding, not to chase a number: "62 tests" was a count, with
-      // no way to tell what it reached.
+      // just under what the suite reaches, so coverage cannot slide
       thresholds: {
         statements: 92,
         branches: 84,

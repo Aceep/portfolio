@@ -9,18 +9,7 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-/**
- * Last line of defence around the whole page.
- *
- * `getContent` throws on a project id with no metadata and `useLanguage`
- * throws outside its provider — both deliberate, both loud in development.
- * In production they rendered a blank white page, which is the worst possible
- * outcome for a portfolio: a recruiter sees nothing and leaves.
- *
- * The fallback is bilingual and static on purpose. Whatever failed may well be
- * the content pipeline itself, so it cannot depend on it — and it keeps the
- * two things a visitor actually came for: the email address and the CV.
- */
+// Fallback is static: the content pipeline may be what threw.
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = { hasError: false };
 

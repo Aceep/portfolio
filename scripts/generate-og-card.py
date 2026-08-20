@@ -1,18 +1,6 @@
 #!/usr/bin/env python3
-"""
-Render the 1200x630 images link previews use — one per positioning:
-
-    public/og-card.png        served on /
-    public/og-card-cyber.png  served on /cyber
-
-Falls back to DejaVu, which every Linux box has. For a card that matches the
-site exactly, drop Syne-Bold.ttf and SpaceMono-Regular/Bold.ttf into
-scripts/fonts/ (https://fonts.google.com) and re-run.
-
-    python3 scripts/generate-og-card.py
-
-Requires Pillow.
-"""
+"""Render public/og-card.png and og-card-cyber.png (1200x630). Requires Pillow, uses scripts/fonts/ or DejaVu.
+Run: python3 scripts/generate-og-card.py"""
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -28,9 +16,7 @@ GHOST = (70, 69, 64)
 
 FIRST, LAST = "ALYCIA", "GAUTIER"
 
-# Site copy — keep in sync with PORTFOLIO.<profile>.fr in src/constants/content.ts.
-# One entry per positioning: scrapers do not run JS, so each route needs its own
-# card rather than the runtime meta swap in src/i18n/meta.ts.
+# keep in sync with PORTFOLIO.<profile>.fr in src/constants/content.ts
 CARDS = {
     "og-card.png": {
         "kicker": "// DÉVELOPPEUSE FRONT-END",

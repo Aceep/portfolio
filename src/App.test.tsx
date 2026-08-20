@@ -17,7 +17,7 @@ describe('App', () => {
     localStorage.setItem('portfolio-lang', 'fr');
   });
 
-  it('mounts the whole page without throwing', () => {
+  it('renders the page', () => {
     renderApp();
 
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('App', () => {
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
-  it('exposes a main landmark and a skip link ahead of the nav', () => {
+  it('renders a skip link before the nav', () => {
     const { ui } = getContent('fr', 'frontend');
     renderApp();
 
@@ -33,13 +33,12 @@ describe('App', () => {
     expect(skip).toHaveAttribute('href', '#main');
     expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
 
-    // The skip link has to come first in the DOM to be the first tab stop.
     expect(skip.compareDocumentPosition(screen.getByRole('navigation'))).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING
     );
   });
 
-  it('names every section it renders, so they are navigable as regions', () => {
+  it('labels every section with aria-labelledby', () => {
     const { container } = renderApp();
 
     const sections = Array.from(container.querySelectorAll('section'));
@@ -51,9 +50,7 @@ describe('App', () => {
     expect(unnamed).toEqual([]);
   });
 
-  // Regression: Focus, Skills and Projects rendered h3s with no h2 above them,
-  // because the section label was a <div>.
-  it('starts the heading ladder at h1 and puts an h2 before any h3', () => {
+  it('has an h1 first and an h2 before any h3', () => {
     const { container } = renderApp();
 
     const levels = Array.from(container.querySelectorAll('h1, h2, h3, h4, h5, h6')).map(
@@ -64,7 +61,7 @@ describe('App', () => {
     expect(levels.indexOf(2)).toBeLessThan(levels.indexOf(3));
   });
 
-  it('serves the cyber positioning its own bundle', () => {
+  it('renders the cyber content bundle', () => {
     const cyber = getContent('fr', 'cyber');
     renderApp('cyber');
 

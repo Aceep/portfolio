@@ -8,11 +8,7 @@ interface ProjectModalProps {
   projectId: string;
 }
 
-/**
- * Case-study modal for projects flagged `modal: true`.
- * Content comes from the language bundle (see `CASE_STUDIES` in
- * `src/constants/content.ts`); this component only renders it.
- */
+// Content comes from CASE_STUDIES in src/constants/content.ts.
 export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, projectId }) => {
   const { c } = useLanguage();
   const headings = c.caseStudyHeadings;
@@ -33,9 +29,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
       return;
     }
 
-    // Where focus came from, so it can be handed back on close. Without this,
-    // dismissing the dialog drops the caret on <body> and a keyboard user
-    // restarts from the top of the page.
+    // Restored on close.
     const opener = document.activeElement as HTMLElement | null;
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -48,8 +42,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
         return;
       }
 
-      // Confine Tab to the dialog: without this the next stop is the page
-      // behind it, which is still scrolled and still interactive.
+      // Trap Tab inside the dialog.
       const elements = focusables();
       if (elements.length === 0) {
         event.preventDefault();
@@ -73,8 +66,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', handleKeyDown);
 
-    // Move focus in, so the first Tab happens inside the dialog rather than
-    // behind it.
     focusables()[0]?.focus();
 
     return () => {
@@ -88,13 +79,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
 
   return (
     <div className="modal-backdrop">
-      {/*
-        A real <button> rather than a click handler on the backdrop div: it is
-        the same mouse affordance, but it satisfies the a11y tree instead of
-        fighting it. Hidden from assistive tech and skipped by Tab, because the
-        keyboard path out of the dialog is Escape and the labelled close button
-        below — announcing a second, identical "close" control would be noise.
-      */}
+      {/* Mouse-only dismiss; keyboard uses Escape or the close button. */}
       <button
         className="modal-backdrop-dismiss"
         onClick={onClose}

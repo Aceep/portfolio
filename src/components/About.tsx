@@ -11,9 +11,6 @@ interface AboutProps {
   journeyLabel: string;
 }
 
-/**
- * About section displaying bio and work experience
- */
 export const About: React.FC<AboutProps> = ({
   title,
   description,

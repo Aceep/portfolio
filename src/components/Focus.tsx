@@ -8,10 +8,6 @@ interface FocusProps {
   label: string;
 }
 
-/**
- * Security focus strip — sits below the hero and reinforces the dev → cyber
- * positioning with three competency pillars (replaces the old featured reel).
- */
 export const Focus: React.FC<FocusProps> = ({ pillars, label }) => {
   return (
     <section id="focus" className="focus-section" aria-labelledby="focus-heading">

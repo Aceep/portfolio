@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import '../styles/components/Navigation.css';
 
-/**
- * Navigation component - Fixed header with logo, navigation links and language toggle
- */
 export const Navigation: React.FC = () => {
   const { c, lang, toggleLang } = useLanguage();
   const navLinks = c.ui.navLinks;
@@ -16,11 +13,7 @@ export const Navigation: React.FC = () => {
   useEffect(() => {
     const sectionIds = navLinks.map((link) => link.href).filter((href) => href.startsWith('#'));
 
-    /*
-     * Section offsets are measured once and on resize, not on every scroll
-     * tick. Reading `offsetTop` inside the scroll handler forced a synchronous
-     * layout on each event — five queries plus five reads, per tick.
-     */
+    // Offsets measured on mount and resize, not per scroll tick.
     let offsets: Array<{ href: string; top: number }> = [];
 
     const measure = () => {
@@ -32,8 +25,7 @@ export const Navigation: React.FC = () => {
         .filter((entry): entry is { href: string; top: number } => entry !== null);
     };
 
-    // Reads are batched into a frame so a burst of scroll events costs one
-    // update rather than one per event.
+    // One update per frame, not per scroll event.
     let frame = 0;
 
     const update = () => {

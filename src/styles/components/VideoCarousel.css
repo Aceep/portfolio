@@ -22,7 +22,6 @@
   display: block;
 }
 
-/* Overlay with play button */
 .video-overlay {
   position: absolute;
   inset: 0;
@@ -65,13 +64,12 @@
   box-shadow: 0 0 60px rgba(210, 161, 58, 0.45);
 }
 
-/* Without an explicit size an SVG with only a viewBox falls back to 300x150. */
+/* SVG with only a viewBox defaults to 300x150 */
 .play-button svg {
   width: 32px;
   height: 32px;
 }
 
-/* Video info overlay */
 .video-info-overlay {
   position: absolute;
   bottom: 0;
@@ -97,7 +95,6 @@
   max-width: 500px;
 }
 
-/* Carousel controls */
 .carousel-controls {
   position: absolute;
   top: 50%;
@@ -130,7 +127,6 @@
   transform: scale(1.1);
 }
 
-/* Thumbnail strip */
 .video-thumbnails {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -216,7 +212,6 @@
   opacity: 1;
 }
 
-/* Carousel counter */
 .carousel-counter {
   position: absolute;
   bottom: 1rem;
@@ -230,7 +225,6 @@
   border: 1px solid var(--border);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .video-carousel {
     max-width: 100%;

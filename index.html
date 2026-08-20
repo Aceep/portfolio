@@ -8,13 +8,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!--
-      `/` serves the front-end positioning, so that is what ships statically.
-      `/cyber` gets its own document, generated from this one at build time by
-      scripts/build-routes.mjs, because link scrapers do not run JS. Both are
-      also swapped at runtime by src/i18n/meta.ts, which is what follows the
-      language toggle once React is up.
-    -->
+    <!-- /cyber is generated from this file by scripts/build-routes.mjs; runtime swap in src/i18n/meta.ts -->
     <title>Alycia Gautier — Développeuse Front-End React &amp; TypeScript</title>
     <meta
       name="description"
@@ -23,16 +17,9 @@
     <meta name="author" content="Alycia Gautier" />
     <meta name="theme-color" content="#171715" />
 
-    <!--
-      Absolute URLs, not root-relative: LinkedIn and Facebook resolve og:image
-      against nothing and drop the preview entirely if it is relative.
-      Canonical + og:url collapse the catch-all rewrite in vercel.json, which
-      answers every unmatched path with a 200. Both are rewritten per route at
-      runtime by src/i18n/meta.ts.
-    -->
+    <!-- og:image must be absolute, LinkedIn/Facebook drop relative ones -->
     <link rel="canonical" href="https://portfolio-topaz-zeta-15.vercel.app/" />
 
-    <!-- Open Graph / social sharing -->
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
     <meta
@@ -56,11 +43,6 @@
     <meta name="twitter:image" content="https://portfolio-topaz-zeta-15.vercel.app/og-card.png" />
     <meta name="twitter:image:alt" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
 
-    <!--
-      Person schema. og:type is already "profile"; this is the structured
-      equivalent search engines actually read. Swapped for the cyber
-      positioning by the prerender step in vite.config.ts.
-    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -101,12 +83,7 @@
       }
     </script>
 
-    <!--
-      Fonts are self-hosted (scripts/vendor-fonts.mjs writes src/styles/fonts.css).
-      Linking fonts.googleapis.com here meant a render-blocking stylesheet on a
-      third-party origin — DNS, TLS and a round trip before first paint.
-      These two carry the headings and every mono label, so they are preloaded.
-    -->
+    <!-- self-hosted fonts, see scripts/vendor-fonts.mjs -->
     <link
       rel="preload"
       href="/fonts/syne-800-latin.woff2"

@@ -15,7 +15,7 @@
   line-height: 1.05;
   letter-spacing: -2px;
   margin-bottom: 2rem;
-  /* The title is authored with newlines in content.ts; keep them. */
+  /* title has newlines in content.ts */
   white-space: pre-wrap;
 }
 

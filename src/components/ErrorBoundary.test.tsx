@@ -8,7 +8,6 @@ const Boom = (): never => {
 
 describe('ErrorBoundary', () => {
   beforeEach(() => {
-    // React logs the caught error itself; keep the test output readable.
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
@@ -26,9 +25,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('the real page')).toBeInTheDocument();
   });
 
-  // Regression: getContent and useLanguage both throw by design, which used to
-  // mean a blank white page — the worst outcome for a portfolio.
-  it('shows a usable fallback instead of a blank page', () => {
+  it('renders a fallback when a child throws', () => {
     render(
       <ErrorBoundary>
         <Boom />
@@ -38,7 +35,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByRole('heading', { name: 'Alycia Gautier' })).toBeInTheDocument();
   });
 
-  it('keeps the two things a visitor came for reachable', () => {
+  it('keeps CV and contact links in the fallback', () => {
     render(
       <ErrorBoundary>
         <Boom />
@@ -55,14 +52,13 @@ describe('ErrorBoundary', () => {
     );
   });
 
-  it('does not depend on the content pipeline it is catching for', () => {
+  it('renders without the content bundle', () => {
     render(
       <ErrorBoundary>
         <Boom />
       </ErrorBoundary>
     );
 
-    // Both languages, statically — the bundle may be what failed.
     expect(screen.getByText(/n’a pas pu s’afficher/)).toBeInTheDocument();
     expect(screen.getByText(/failed to load/)).toBeInTheDocument();
   });

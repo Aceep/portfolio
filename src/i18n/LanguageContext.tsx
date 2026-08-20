@@ -19,15 +19,7 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 const isLang = (value: unknown): value is Lang => value === 'fr' || value === 'en';
 
-/**
- * Resolve the initial language: stored preference → browser locale → 'fr'.
- *
- * French stays the default because the roles are French. But the site is
- * genuinely bilingual and the toggle is a small chip in the nav, so an
- * English-speaking recruiter used to land on French copy and have to find it.
- * A browser that asks for anything other than French now gets English on the
- * first visit only — an explicit choice is stored and always wins afterwards.
- */
+// stored preference > browser locale > 'fr'
 const getInitialLang = (): Lang => {
   if (typeof window === 'undefined') return 'fr';
 
@@ -67,9 +59,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children, pr
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };
 
-/**
- * Access the active language and its resolved content bundle.
- */
 export const useLanguage = (): LanguageContextValue => {
   const ctx = useContext(LanguageContext);
   if (!ctx) {

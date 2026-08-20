@@ -15,16 +15,7 @@ import type {
   LocalizedContent,
 } from '../types';
 
-/* -------------------------------------------------------------------------- */
-/*  Two positionings, one site                                                */
-/*                                                                            */
-/*  `frontend` is served at `/` and targets a full-time front-end CDI.        */
-/*  `cyber`    is served at `/cyber` and targets the Sept 2026 security       */
-/*             apprenticeship.                                                */
-/*                                                                            */
-/*  Anything that reads the same in both lives in a shared constant; only     */
-/*  what actually diverges is keyed by profile.                               */
-/* -------------------------------------------------------------------------- */
+// Two profiles: `frontend` at `/`, `cyber` at `/cyber`. Shared text is unkeyed.
 
 /* -------------------------------------------------------------------------- */
 /*  Language-neutral metadata (single source of truth for structure)          */
@@ -36,12 +27,7 @@ interface SkillMeta {
   group: string;
 }
 
-// Order = display order within each group.
-//
-// There is deliberately no proficiency score here. A self-declared "React 90%"
-// is unfalsifiable and widely discounted by the people this page is written
-// for; the evidence lives in SKILL_TEXT[lang][id].label instead, where it can
-// name the work it came from.
+// Order = display order within each group. No proficiency score by design.
 const SKILLS_META: Record<Profile, SkillMeta[]> = {
   frontend: [
     { id: 'react', icon: '❖', group: 'core' },
@@ -102,8 +88,7 @@ interface ProjectMeta {
   modal?: boolean;
 }
 
-// Structure only — display order and the "001" numbering come from
-// PROJECT_ORDER below, so reordering per profile stays consistent.
+// Structure only; display order and numbering come from PROJECT_ORDER.
 const PROJECTS_META: ProjectMeta[] = [
   {
     id: 'NFT-Kyle-app',
@@ -224,17 +209,14 @@ const CONTACT_META: Array<{ id: string; url: string; external?: boolean }> = [
   { id: 'cv', url: '' }, // resolved per profile via CV_URL
 ];
 
-/**
- * Each positioning links its own CV. The security CV opens by asking for an
- * apprenticeship, which would contradict the CDI pitch on `/`.
- */
+// One CV per profile.
 export const CV_URL: Record<Profile, string> = {
   frontend: '/GAUTIER_Alycia_CV_Frontend.pdf',
   cyber: '/GAUTIER_Alycia_CV.pdf',
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Per-language text — shared between both profiles                          */
+/*  Per-language text, shared between both profiles                          */
 /* -------------------------------------------------------------------------- */
 
 const SKILL_TEXT: Record<Lang, Record<string, { name: string; label: string }>> = {
@@ -301,7 +283,7 @@ const EXPERIENCE_TEXT: Record<Profile, Record<Lang, Experience[]>> = {
         id: 'master',
         year: 'En cours',
         company: 'École 42 — Master Sécurité & Administration Réseau',
-        role: '// Bac +5',
+        role: '// Bac +4',
       },
     ],
     en: [
@@ -321,7 +303,7 @@ const EXPERIENCE_TEXT: Record<Profile, Record<Lang, Experience[]>> = {
         id: 'master',
         year: 'Ongoing',
         company: "École 42 — Master's in Network Security & Administration",
-        role: '// MSc',
+        role: '// Bac +4',
       },
     ],
   },
@@ -666,7 +648,7 @@ const FOCUS: Record<Profile, Record<Lang, FocusPillar[]>> = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  UI micro-copy — shared base, per-profile overrides                        */
+/*  UI micro-copy, shared base, per-profile overrides                        */
 /* -------------------------------------------------------------------------- */
 
 type SharedUI = Omit<
@@ -711,7 +693,6 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     projectCta: 'Voir le projet',
     projectCtaDetails: 'Lire l’étude de cas',
     projectConfidential: 'Travail client · sous NDA',
-    projectConfidentialNote: 'Étude de cas détaillée à l’intérieur',
     videosLabel: '04 — Vidéos',
     videosHeading: 'Côté créatif',
     videosSubtitle:
@@ -757,7 +738,6 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     projectCta: 'View project',
     projectCtaDetails: 'Read the case study',
     projectConfidential: 'Client work · under NDA',
-    projectConfidentialNote: 'Detailed case study inside',
     videosLabel: '04 — Videos',
     videosHeading: 'Creative side',
     videosSubtitle:
@@ -798,8 +778,6 @@ const UI_BY_PROFILE: Record<Profile, Record<Lang, ProfileUI>> = {
         'Du travail livré en entreprise et des projets construits pour apprendre — React, Vue, TypeScript et un peu de 3D.',
       focusLabel: 'Ce que je fais',
       footerRole: 'Développeuse Front-End',
-      otherProfileLabel: 'Voir la version cybersécurité',
-      otherProfileHref: '/cyber',
     },
     en: {
       navAvailability: 'Full-time front-end · Sep 2026',
@@ -809,8 +787,6 @@ const UI_BY_PROFILE: Record<Profile, Record<Lang, ProfileUI>> = {
         'Work shipped on the job and projects built to learn — React, Vue, TypeScript and a bit of 3D.',
       focusLabel: 'What I do',
       footerRole: 'Front-End Developer',
-      otherProfileLabel: 'See the cybersecurity version',
-      otherProfileHref: '/cyber',
     },
   },
   cyber: {
@@ -840,7 +816,7 @@ const UI_BY_PROFILE: Record<Profile, Record<Lang, ProfileUI>> = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Case studies — long-form detail for the `modal: true` projects            */
+/*  Case studies, long-form detail for the `modal: true` projects            */
 /*                                                                            */
 /*  Keyed by the same project id as PROJECTS_META. A project without an entry */
 /*  falls back to `soon`, so adding a modal project never breaks the render.  */
@@ -865,22 +841,7 @@ const CASE_STUDY_HEADINGS: Record<Lang, CaseStudyHeadings> = {
   },
 };
 
-/*
- * A recruiter skims a case study for numbers before reading its prose, and
- * these two are the only paid production work on the site. Every entry below
- * therefore accepts an optional `metrics` array, rendered as a stat row above
- * the prose:
- *
- *   metrics: [
- *     { value: '12', label: 'composants publiés' },
- *     { value: '~40%', label: 'de couverture Jest' },
- *   ],
- *
- * They are deliberately left empty rather than estimated — an invented figure
- * on a job application is worse than none. Fill them in with what is actually
- * known: components in react-playmakers, screens shipped, team size, coverage,
- * before/after timings.
- */
+// Optional `metrics: [{ value, label }]` renders a stat row. Real figures only.
 const CASE_STUDIES: Record<Lang, Record<string, CaseStudy>> = {
   fr: {
     'playmakers-professional': {
@@ -965,17 +926,10 @@ const CASE_STUDIES: Record<Lang, Record<string, CaseStudy>> = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Assembly — resolve a full single-language, single-profile bundle          */
+/*  Assembly, resolve a full single-language, single-profile bundle          */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Resolve a lookup that the tables are expected to satisfy, or fail loudly.
- *
- * The tables are keyed by plain strings, so a typo resolves to `undefined` and
- * would otherwise render as a blank line. Throwing here matches how
- * PROJECT_ORDER already handles an unknown id: break at startup, where the
- * tests catch it, rather than ship a hole.
- */
+// Throw on a missing key instead of rendering a blank line.
 function required<T>(value: T | undefined, what: string): T {
   if (value === undefined) {
     throw new Error(`content: missing ${what}`);

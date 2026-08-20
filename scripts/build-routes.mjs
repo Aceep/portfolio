@@ -1,16 +1,6 @@
 #!/usr/bin/env node
-/**
- * Emit dist/cyber.html — the static document served at /cyber.
- *
- * Link scrapers and crawlers do not run JS, so the runtime swap in
- * src/i18n/meta.ts never reaches them: every share of /cyber previewed with
- * the front-end card and the front-end description. This rewrites the head of
- * the built index.html for the cybersecurity positioning and writes it as a
- * second document, which vercel.json points /cyber at.
- *
- * Every substitution is asserted. A silent miss would ship the wrong pitch to
- * every recruiter who sees the link, so a miss fails the build instead.
- */
+// Rewrites the built index.html head for /cyber and writes dist/cyber.html.
+// Runs after vite build (see package.json).
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,7 +12,7 @@ const SITE_URL = 'https://portfolio-topaz-zeta-15.vercel.app';
 const from = meta.frontend.fr;
 const to = meta.cyber.fr;
 
-/** HTML-escape the way the source document writes ampersands. */
+// match how the source document escapes ampersands
 const esc = (value) => value.replace(/&/g, '&amp;');
 
 const substitutions = [
@@ -44,15 +34,12 @@ for (const [what, search, replacement] of substitutions) {
   html = html.replaceAll(search, replacement);
 }
 
-// The two shorter social descriptions are authored separately in index.html,
-// so they are not covered by the substitutions above. Point every remaining
-// og/twitter description at the cyber pitch.
+// og/twitter descriptions are authored separately in index.html
 html = html.replace(
   /(<meta\s+(?:property="og:description"|name="twitter:description")[\s\S]{0,40}?content=")[^"]*(")/g,
   `$1${esc(to.description)}$2`
 );
 
-// The JSON-LD block describes the front-end positioning.
 const ld = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
 if (!ld) {
   console.error('build-routes: no JSON-LD block found in dist/index.html.');
@@ -77,7 +64,6 @@ html = html.replace(
   `<script type="application/ld+json">\n${JSON.stringify(profile, null, 2)}\n    </script>`
 );
 
-// Guard against shipping the front-end pitch under the cyber route.
 for (const leftover of [esc(from.title), `${SITE_URL}${from.ogImage}`]) {
   if (html.includes(leftover)) {
     console.error(`build-routes: front-end copy survived into cyber.html: ${leftover}`);

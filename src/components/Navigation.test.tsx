@@ -21,21 +21,18 @@ const [firstNavLink] = fr.ui.navLinks;
 
 describe('Navigation', () => {
   beforeEach(() => {
-    // jsdom reports en-US, and the provider now honours the browser locale on
-    // a first visit. These assertions are written against the French bundle.
+    // jsdom reports en-US; assertions use the French bundle.
     localStorage.setItem('portfolio-lang', 'fr');
   });
 
-  it('labels the menu control in the active language, not in English', () => {
+  it('labels the menu button in the active language', () => {
     renderNav();
 
-    // Regression: this label and the button text were hardcoded English, so
-    // the French site announced "Toggle navigation menu".
     expect(menuButton()).toBeInTheDocument();
     expect(menuButton()).toHaveTextContent(fr.ui.menuOpen);
   });
 
-  it('reports the menu state through aria-expanded and points at the list it controls', async () => {
+  it('sets aria-expanded and aria-controls on the menu button', async () => {
     const user = userEvent.setup();
     renderNav();
 
@@ -48,7 +45,7 @@ describe('Navigation', () => {
     expect(menuButton()).toHaveTextContent(fr.ui.menuClose);
   });
 
-  it('offers a labelled way back out once the menu is open', async () => {
+  it('renders a close button when the menu is open', async () => {
     const user = userEvent.setup();
     renderNav();
 
@@ -61,7 +58,7 @@ describe('Navigation', () => {
     expect(menuButton()).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('closes the menu when a destination is chosen', async () => {
+  it('closes the menu when a link is clicked', async () => {
     const user = userEvent.setup();
     renderNav();
 
@@ -71,15 +68,14 @@ describe('Navigation', () => {
     expect(menuButton()).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('gives the logo a navigable target', () => {
+  it('links the logo to #hero', () => {
     renderNav();
 
-    // An empty `href="#"` is not a valid destination; the hero section is.
     const [logo] = screen.getAllByRole('link');
     expect(logo).toHaveAttribute('href', '#hero');
   });
 
-  it('swaps the whole bundle when the language is toggled, and remembers it', async () => {
+  it('switches language and persists the choice', async () => {
     const user = userEvent.setup();
     renderNav();
 

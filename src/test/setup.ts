@@ -2,15 +2,10 @@ import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 
-// Testing Library only auto-registers this when Vitest globals are on, and
-// they are off here so tests import what they use.
+// Vitest globals are off, so cleanup is not auto-registered.
 afterEach(cleanup);
 
-/**
- * jsdom implements neither of the observers the site relies on, so the
- * components under test would throw before rendering. These stand-ins record
- * what was observed, which is exactly what the Skills test needs to assert.
- */
+// jsdom has no IntersectionObserver; this stub records observed targets.
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root = null;
   readonly rootMargin = '';
@@ -41,14 +36,7 @@ class MockIntersectionObserver implements IntersectionObserver {
 
 vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
 
-/**
- * The custom cursor asks about pointer capabilities on mount.
- *
- * Re-installed before every test, not once per file: `restoreMocks` in
- * vite.config.ts resets mock implementations after each test, which would
- * leave `matchMedia` returning undefined from the second test onwards — and
- * anything rendering <Cursor /> would throw on `.matches`.
- */
+// matchMedia stub is reinstalled before each test because restoreMocks wipes it.
 const stubMatchMedia = () =>
   vi.stubGlobal(
     'matchMedia',
