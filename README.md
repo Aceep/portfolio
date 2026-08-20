@@ -108,7 +108,7 @@ tree, which is the one item below that has not been done.
 
 ## Testing
 
-Vitest + Testing Library, 93 tests, with coverage reported and thresholded in
+Vitest + Testing Library, 98 tests, with coverage reported and thresholded in
 CI (`npm run test:coverage`). The suite is weighted towards the places this
 codebase can break quietly:
 
@@ -130,6 +130,9 @@ codebase can break quietly:
 - **`ErrorBoundary.test.tsx`** — that a throw renders a usable fallback rather
   than a blank page, and that the fallback does not depend on the content
   pipeline it is catching for.
+- **`App.test.tsx`** — the page assembles: skip link before the nav, a `main`
+  landmark, every `<section>` a named region, and a heading ladder that starts
+  at `h1` and reaches `h2` before any `h3`.
 
 Several tests are explicit regressions and say so in a comment above them:
 the discarded observer ref, the empty filter that unmounted its own filter bar,
@@ -169,10 +172,10 @@ Honest list, roughly in the order I would fix them:
 - **The case studies carry no numbers.** `CaseStudy` takes an optional
   `metrics` array rendered as a stat row, and `content.ts` documents what to
   put there. It is deliberately empty rather than estimated.
-- **Coverage is uneven.** 74% of statements, but the purely presentational
-  sections — Hero, Focus, Videos, Footer — are still untested, and the
-  threshold in `vite.config.ts` is set at the bar the suite already clears
-  rather than an aspirational one.
+- **Coverage counts lines, not judgement.** 96% of statements, but much of that
+  comes from the whole-page smoke test in `src/App.test.tsx` mounting the
+  presentational sections rather than asserting anything about them. Branch
+  coverage, at 88%, is the more honest number.
 - **The originals of the WebP assets are still in `public/`.** They are
   unreferenced, so no visitor downloads them, but they are deployed.
 

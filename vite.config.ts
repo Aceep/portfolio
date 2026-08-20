@@ -18,14 +18,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      // The bar the suite already clears. It is here to stop coverage
-      // sliding, not to chase a number: "62 tests" was a count, and there was
-      // no way to tell what they actually reached.
+      // Set just under what the suite actually reaches. The point is to stop
+      // coverage sliding, not to chase a number: "62 tests" was a count, with
+      // no way to tell what it reached.
       thresholds: {
-        statements: 60,
-        branches: 70,
-        functions: 55,
-        lines: 60,
+        statements: 92,
+        branches: 84,
+        functions: 72,
+        lines: 92,
       },
       include: ['src/**/*.{ts,tsx}'],
       exclude: ['src/main.tsx', 'src/test/**', 'src/types/**', '**/*.test.{ts,tsx}'],
