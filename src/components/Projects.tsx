@@ -86,13 +86,22 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
    */
   const renderCardBody = (project: Project, ctaLabel: string | null) => (
     <>
-      <ProjectGallery
-        preview={project.preview}
-        confidential={project.category === 'professional'}
-        confidentialLabel={ui.projectConfidential}
-        confidentialNote={ui.projectConfidentialNote}
-      />
+      <ProjectGallery preview={project.preview} />
       <div className="project-content">
+        {/*
+          Client work cannot show a screenshot. Stating that where the preview
+          would be reads as professionalism; leaving the space blank, next to
+          eight cards that have one, reads as an unfinished section.
+        */}
+        {project.category === 'professional' && (
+          <div className="project-confidential">
+            <span className="project-confidential-glyph" aria-hidden="true">
+              ⬡
+            </span>
+            <span className="project-confidential-label">{ui.projectConfidential}</span>
+          </div>
+        )}
+
         <div className="project-cover-header">
           <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
           <div className="project-category">{getCategoryLabel(project.category)}</div>

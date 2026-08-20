@@ -711,7 +711,6 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     projectCta: 'Voir le projet',
     projectCtaDetails: 'Lire l’étude de cas',
     projectConfidential: 'Travail client · sous NDA',
-    projectConfidentialNote: 'Étude de cas détaillée à l’intérieur',
     videosLabel: '04 — Vidéos',
     videosHeading: 'Côté créatif',
     videosSubtitle:
@@ -757,7 +756,6 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     projectCta: 'View project',
     projectCtaDetails: 'Read the case study',
     projectConfidential: 'Client work · under NDA',
-    projectConfidentialNote: 'Detailed case study inside',
     videosLabel: '04 — Videos',
     videosHeading: 'Creative side',
     videosSubtitle:

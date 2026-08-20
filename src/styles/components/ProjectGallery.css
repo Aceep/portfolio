@@ -73,45 +73,37 @@
 }
 
 /*
- * Stand-in for a screenshot on client work under NDA. A designed absence: a
- * blank where every neighbouring card has an image reads as an unfinished
- * section, which is the opposite of what confidentiality should signal.
+ * Stand-in for a screenshot on client work under NDA.
+ *
+ * Deliberately NOT .project-gallery: that is an absolutely positioned hover
+ * backdrop at opacity 0, and this has to be visible at rest. It sits in flow
+ * at the top of the card, where a preview would be.
  */
-.project-gallery-confidential {
+.project-confidential {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  text-align: center;
-  padding: 1.5rem;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--surface),
-    var(--surface) 10px,
-    var(--surface2) 10px,
-    var(--surface2) 20px
-  );
-  border-bottom: 1px solid var(--border);
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--yellow);
+  border-radius: 6px;
+  background: var(--surface);
+  position: relative;
+  z-index: 1;
 }
 
 .project-confidential-glyph {
-  font-size: 20px;
+  font-size: 13px;
   color: var(--yellow);
   line-height: 1;
 }
 
 .project-confidential-label {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
+  font-size: 9px;
+  letter-spacing: 1.6px;
   text-transform: uppercase;
   color: var(--muted-strong);
-}
-
-.project-confidential-note {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1.2px;
-  color: var(--muted);
+  line-height: 1.4;
 }
