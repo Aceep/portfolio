@@ -16,6 +16,16 @@
       content="Développeuse front-end, deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d'un CDI à partir de septembre 2026, Paris ou télétravail."
     />
     <meta name="author" content="Alycia Gautier" />
+    <meta name="theme-color" content="#171715" />
+
+    <!--
+      Absolute URLs, not root-relative: LinkedIn and Facebook resolve og:image
+      against nothing and drop the preview entirely if it is relative.
+      Canonical + og:url collapse the catch-all rewrite in vercel.json, which
+      answers every unmatched path with a 200. Both are rewritten per route at
+      runtime by src/i18n/meta.ts.
+    -->
+    <link rel="canonical" href="https://portfolio-topaz-zeta-15.vercel.app/" />
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="profile" />
@@ -24,9 +34,11 @@
       property="og:description"
       content="Deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. En recherche d'un CDI à partir de septembre 2026."
     />
-    <meta property="og:image" content="/og-card.png" />
+    <meta property="og:url" content="https://portfolio-topaz-zeta-15.vercel.app/" />
+    <meta property="og:image" content="https://portfolio-topaz-zeta-15.vercel.app/og-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:locale:alternate" content="en_US" />
 
@@ -36,7 +48,8 @@
       name="twitter:description"
       content="Deux ans d'interfaces React, TypeScript, Vue et Tailwind livrées en production. CDI recherché à partir de septembre 2026."
     />
-    <meta name="twitter:image" content="/og-card.png" />
+    <meta name="twitter:image" content="https://portfolio-topaz-zeta-15.vercel.app/og-card.png" />
+    <meta name="twitter:image:alt" content="Alycia Gautier — Développeuse Front-End React &amp; TypeScript" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

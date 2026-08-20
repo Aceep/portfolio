@@ -15,11 +15,8 @@
   line-height: 1.05;
   letter-spacing: -2px;
   margin-bottom: 2rem;
-}
-
-.about-title em {
-  font-style: normal;
-  color: var(--yellow);
+  /* The title is authored with newlines in content.ts; keep them. */
+  white-space: pre-wrap;
 }
 
 .about-body {

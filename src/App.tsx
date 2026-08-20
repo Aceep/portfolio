@@ -96,7 +96,7 @@ function App() {
       />
 
       <Footer
-        copyright={`© 2025 — ${portfolio.name} — ${ui.footerRole}`}
+        copyright={`© ${new Date().getFullYear()} — ${portfolio.name} — ${ui.footerRole}`}
         otherProfileLabel={ui.otherProfileLabel}
         otherProfileHref={ui.otherProfileHref}
       />
