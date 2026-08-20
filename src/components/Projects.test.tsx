@@ -11,26 +11,27 @@ const { ui } = content;
 
 // `playmakers-professional` is the id the real case-study table is keyed by,
 // so the modal renders actual content rather than the fallback.
-const PROJECTS: Project[] = [
-  {
-    id: 'playmakers-professional',
-    number: '001',
-    name: 'PlayMakers',
-    description: 'Plateforme sportive en production.',
-    tags: ['React', 'TypeScript'],
-    category: 'professional',
-    modal: true,
-  },
-  {
-    id: 'shifumi',
-    number: '002',
-    name: 'Shifumi',
-    description: 'Pierre-feuille-ciseaux.',
-    tags: ['JavaScript'],
-    category: 'personal',
-    link: 'https://example.com/shifumi',
-  },
-];
+const PLAYMAKERS: Project = {
+  id: 'playmakers-professional',
+  number: '001',
+  name: 'PlayMakers',
+  description: 'Plateforme sportive en production.',
+  tags: ['React', 'TypeScript'],
+  category: 'professional',
+  modal: true,
+};
+
+const SHIFUMI: Project = {
+  id: 'shifumi',
+  number: '002',
+  name: 'Shifumi',
+  description: 'Pierre-feuille-ciseaux.',
+  tags: ['JavaScript'],
+  category: 'personal',
+  link: 'https://example.com/shifumi',
+};
+
+const PROJECTS: Project[] = [PLAYMAKERS, SHIFUMI];
 
 const renderProjects = (projects: Project[] = PROJECTS) =>
   render(
@@ -166,7 +167,7 @@ describe('Projects', () => {
   });
 
   it('renders a project with no link as plain content, not a broken link', () => {
-    renderProjects([{ ...PROJECTS[1], link: undefined }]);
+    renderProjects([{ ...SHIFUMI, link: undefined }]);
 
     expect(screen.queryByRole('link', { name: /Shifumi/ })).not.toBeInTheDocument();
     expect(within(grid()).getByText('Shifumi')).toBeInTheDocument();
@@ -174,7 +175,7 @@ describe('Projects', () => {
 
   it('falls back to a placeholder when a modal project has no case study', async () => {
     const user = userEvent.setup();
-    renderProjects([{ ...PROJECTS[0], id: 'not-written-yet' }]);
+    renderProjects([{ ...PLAYMAKERS, id: 'not-written-yet' }]);
 
     await user.click(screen.getByRole('button', { name: /PlayMakers/ }));
 

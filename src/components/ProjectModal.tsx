@@ -56,8 +56,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
         return;
       }
 
-      const first = elements[0];
-      const last = elements[elements.length - 1];
+      const first = elements[0]!;
+      const last = elements[elements.length - 1]!;
       const active = document.activeElement;
 
       if (event.shiftKey && (active === first || !containerRef.current?.contains(active))) {

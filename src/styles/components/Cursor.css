@@ -1,5 +1,9 @@
 #cursor {
   position: fixed;
+  /* `translate` is written per frame by useCursorTracker; `transform` below
+     stays free for the centring offset and the hover scale. */
+  top: 0;
+  left: 0;
   width: 12px;
   height: 12px;
   background: var(--yellow);
