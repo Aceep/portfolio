@@ -59,6 +59,27 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
     expect(cvLink?.url).toBe(CV_URL[profile]);
   });
 
+  it('numbers the section labels contiguously, in page order', () => {
+    // Page order is fixed by App.tsx: About, Skills, Projects, Videos, Contact.
+    // Focus deliberately carries no number — it is a lead-in, not a section.
+    const labels = [
+      content.ui.aboutLabel,
+      content.ui.skillsLabel,
+      content.ui.projectsLabel,
+      content.ui.videosLabel,
+      content.ui.contactLabel,
+    ];
+    expect(labels.map((label) => label.slice(0, 2))).toEqual(['01', '02', '03', '04', '05']);
+  });
+
+  it('keeps every case-study metric well formed', () => {
+    const malformed = Object.entries(content.caseStudies)
+      .flatMap(([id, study]) => (study.metrics ?? []).map((metric) => ({ id, metric })))
+      .filter(({ metric }) => !metric.value?.trim() || !metric.label?.trim())
+      .map(({ id }) => id);
+    expect(malformed).toEqual([]);
+  });
+
   it('gives every video a poster and a title', () => {
     const incomplete = content.videos.filter((v) => !v.poster || !v.title).map((v) => v.id);
     expect(incomplete).toEqual([]);

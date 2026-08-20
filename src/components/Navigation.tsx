@@ -52,7 +52,7 @@ export const Navigation: React.FC = () => {
 
   return (
     <nav className={`site-nav ${isCompact ? 'compact' : ''}`}>
-      <a className="nav-logo" href="#">
+      <a className="nav-logo" href="#hero">
         <img
           src="/Kyle.png"
           alt=""
@@ -66,13 +66,14 @@ export const Navigation: React.FC = () => {
       <button
         className="nav-menu-btn"
         onClick={() => setIsMenuOpen((prev) => !prev)}
-        aria-label="Toggle navigation menu"
+        aria-label={c.ui.menuToggleLabel}
         aria-expanded={isMenuOpen}
+        aria-controls="nav-links"
       >
-        {isMenuOpen ? 'Close' : 'Menu'}
+        {isMenuOpen ? c.ui.menuClose : c.ui.menuOpen}
       </button>
 
-      <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+      <ul id="nav-links" className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
         {navLinks.map((link) => (
           <li key={link.href}>
             <a
@@ -101,7 +102,9 @@ export const Navigation: React.FC = () => {
         </div>
       </div>
 
-      {isMenuOpen && <button className="nav-overlay" aria-label="Close navigation menu" onClick={closeMenu} />}
+      {isMenuOpen && (
+        <button className="nav-overlay" aria-label={c.ui.menuCloseLabel} onClick={closeMenu} />
+      )}
     </nav>
   );
 };

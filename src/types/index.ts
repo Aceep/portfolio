@@ -11,7 +11,7 @@ export interface Skill {
   id: string;
   name: string;
   icon: string;
-  level: number;
+  /** What backs the skill — the work it came from, not a self-assigned score. */
   label: string;
   /** Key of the owning group; the set of groups is declared per profile. */
   group: string;
@@ -46,11 +46,25 @@ export interface Project {
  * Long-form detail for a project rendered in the modal.
  * Only projects flagged `modal: true` have one.
  */
+/** One headline number, shown as a stat tile above the prose. */
+export interface CaseStudyMetric {
+  /** The number itself — "12", "~40%", "3 → 1". */
+  value: string;
+  /** What it counts, in a few words. */
+  label: string;
+}
+
 export interface CaseStudy {
   title: string;
   kicker: string;
   role: string;
   duration: string;
+  /**
+   * Quantified outcomes. Optional, because a case study without real numbers
+   * is better than one with invented ones — but a recruiter skims for these
+   * before reading a word of the prose, so fill them in where you can.
+   */
+  metrics?: CaseStudyMetric[];
   context: string;
   challenge: string;
   approach: string[];
@@ -126,7 +140,7 @@ export interface UIStrings {
   aboutLabel: string;
   aboutJourneyLabel: string;
   skillsLabel: string;
-  projectsTitle: string;
+  projectsLabel: string;
   projectsKicker: string;
   projectsSummary: string;
   projectsShown: string;
@@ -145,6 +159,9 @@ export interface UIStrings {
   projectCta: string;
   /** Call to action on project cards that open the detail modal. */
   projectCtaDetails: string;
+  /** Shown in place of a screenshot on client work that cannot be shown. */
+  projectConfidential: string;
+  projectConfidentialNote: string;
   focusLabel: string;
   videosLabel: string;
   videosHeading: string;
@@ -155,6 +172,22 @@ export interface UIStrings {
   /** Discreet cross-link to the other positioning of the site. */
   otherProfileLabel: string;
   otherProfileHref: string;
+
+  /*
+   * Assistive-technology strings. These used to be hardcoded English in the
+   * components, which meant the French site announced English labels — the one
+   * place the bilingual pipeline leaked. They live here like every other
+   * string, so `content.test.ts` covers them for free.
+   */
+  skipToContent: string;
+  menuOpen: string;
+  menuClose: string;
+  menuToggleLabel: string;
+  menuCloseLabel: string;
+  closeModalLabel: string;
+  previousVideoLabel: string;
+  nextVideoLabel: string;
+  projectFiltersLabel: string;
 }
 
 /**

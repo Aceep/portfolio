@@ -12,7 +12,9 @@ export const Marquee: React.FC<MarqueeProps> = ({ items }) => {
   const marqueeText = items.join(' · ');
 
   return (
-    <div className="marquee-bar">
+    // Decorative: the text is duplicated to make the loop seamless, and the
+    // same technologies are listed accessibly in the Skills section.
+    <div className="marquee-bar" aria-hidden="true">
       <div className="marquee-inner">
         {marqueeText} · {marqueeText} ·
       </div>

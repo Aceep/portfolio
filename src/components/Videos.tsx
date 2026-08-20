@@ -14,17 +14,17 @@ interface VideosProps {
  */
 export const Videos: React.FC<VideosProps> = ({ videos, ui }) => {
   return (
-    <section id="videos">
+    <section id="videos" aria-labelledby="videos-heading">
       <div className="videos-container">
         <SectionLabel>{ui.videosLabel}</SectionLabel>
 
         <div className="videos-content">
           <div className="videos-header">
-            <h2>{ui.videosHeading}</h2>
+            <h2 id="videos-heading">{ui.videosHeading}</h2>
             <p>{ui.videosSubtitle}</p>
           </div>
 
-          <VideoCarousel videos={videos} />
+          <VideoCarousel videos={videos} ui={ui} />
         </div>
       </div>
     </section>

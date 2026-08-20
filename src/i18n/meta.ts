@@ -1,4 +1,11 @@
 import type { Lang, Profile } from '../types';
+import { PROFILE_PATHS } from './profile';
+
+/**
+ * Canonical origin. Kept here rather than read from `window.location` so a
+ * preview deployment never advertises itself as the canonical copy.
+ */
+export const SITE_URL = 'https://portfolio-topaz-zeta-15.vercel.app';
 
 interface DocumentMeta {
   title: string;
@@ -44,6 +51,13 @@ const DOCUMENT_META: Record<Profile, Record<Lang, DocumentMeta>> = {
   },
 };
 
+const setLinkHref = (rel: string, value: string) => {
+  const tag = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+  if (tag) {
+    tag.href = value;
+  }
+};
+
 const setMetaContent = (attribute: 'name' | 'property', key: string, value: string) => {
   const tag = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
   if (tag) {
@@ -64,4 +78,10 @@ export const applyDocumentMeta = (lang: Lang, profile: Profile) => {
   setMetaContent('property', 'og:locale', lang === 'fr' ? 'fr_FR' : 'en_US');
   setMetaContent('name', 'twitter:title', title);
   setMetaContent('name', 'twitter:description', description);
+
+  // The catch-all rewrite in vercel.json answers every unmatched path with a
+  // 200, so point both of these at the route that is actually being served.
+  const canonical = `${SITE_URL}${PROFILE_PATHS[profile]}`;
+  setLinkHref('canonical', canonical);
+  setMetaContent('property', 'og:url', canonical);
 };

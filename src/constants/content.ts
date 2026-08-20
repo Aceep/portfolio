@@ -33,37 +33,39 @@ import type {
 interface SkillMeta {
   id: string;
   icon: string;
-  level: number;
   group: string;
 }
 
 // Order = display order within each group.
-// NOTE (levels): derived from the CV's own tiers — "Expérimentée" ≈ 85-90,
-// "Outils" ≈ 72-85, "Familière" ≈ 55-65. Adjust freely, they are editorial.
+//
+// There is deliberately no proficiency score here. A self-declared "React 90%"
+// is unfalsifiable and widely discounted by the people this page is written
+// for; the evidence lives in SKILL_TEXT[lang][id].label instead, where it can
+// name the work it came from.
 const SKILLS_META: Record<Profile, SkillMeta[]> = {
   frontend: [
-    { id: 'react', icon: '❖', level: 90, group: 'core' },
-    { id: 'javascript', icon: '◇', level: 90, group: 'core' },
-    { id: 'typescript', icon: '◈', level: 88, group: 'core' },
-    { id: 'htmlcss', icon: '◧', level: 88, group: 'core' },
-    { id: 'tailwind', icon: '≋', level: 85, group: 'core' },
-    { id: 'vue', icon: '△', level: 75, group: 'core' },
-    { id: 'git', icon: '⬡', level: 85, group: 'tooling' },
-    { id: 'vercel', icon: '▲', level: 80, group: 'tooling' },
-    { id: 'figma', icon: '✦', level: 78, group: 'tooling' },
-    { id: 'jest', icon: '✓', level: 72, group: 'tooling' },
-    { id: 'threejs', icon: '◉', level: 65, group: 'tooling' },
+    { id: 'react', icon: '❖', group: 'core' },
+    { id: 'javascript', icon: '◇', group: 'core' },
+    { id: 'typescript', icon: '◈', group: 'core' },
+    { id: 'htmlcss', icon: '◧', group: 'core' },
+    { id: 'tailwind', icon: '≋', group: 'core' },
+    { id: 'vue', icon: '△', group: 'core' },
+    { id: 'git', icon: '⬡', group: 'tooling' },
+    { id: 'vercel', icon: '▲', group: 'tooling' },
+    { id: 'figma', icon: '✦', group: 'tooling' },
+    { id: 'jest', icon: '✓', group: 'tooling' },
+    { id: 'threejs', icon: '◉', group: 'tooling' },
   ],
   cyber: [
-    { id: 'linux', icon: '⬢', level: 78, group: 'cyber' },
-    { id: 'reseau', icon: '⇄', level: 72, group: 'cyber' },
-    { id: 'gdb', icon: '▤', level: 66, group: 'cyber' },
-    { id: 'reverse', icon: '⟲', level: 62, group: 'cyber' },
-    { id: 'asm', icon: '⌗', level: 58, group: 'cyber' },
-    { id: 'react', icon: '❖', level: 90, group: 'dev' },
-    { id: 'typescript', icon: '◈', level: 88, group: 'dev' },
-    { id: 'javascript', icon: '◇', level: 90, group: 'dev' },
-    { id: 'vue', icon: '△', level: 75, group: 'dev' },
+    { id: 'linux', icon: '⬢', group: 'cyber' },
+    { id: 'reseau', icon: '⇄', group: 'cyber' },
+    { id: 'gdb', icon: '▤', group: 'cyber' },
+    { id: 'reverse', icon: '⟲', group: 'cyber' },
+    { id: 'asm', icon: '⌗', group: 'cyber' },
+    { id: 'react', icon: '❖', group: 'dev' },
+    { id: 'typescript', icon: '◈', group: 'dev' },
+    { id: 'javascript', icon: '◇', group: 'dev' },
+    { id: 'vue', icon: '△', group: 'dev' },
   ],
 };
 
@@ -244,12 +246,12 @@ const SKILL_TEXT: Record<Lang, Record<string, { name: string; label: string }>> 
     reverse: { name: 'Reverse Engineering', label: 'Binaire' },
     asm: { name: 'Assembleur', label: 'x86' },
     // Front-end
-    react: { name: 'React', label: 'Expert · 2 ans en prod' },
-    typescript: { name: 'TypeScript', label: 'Avancé' },
-    javascript: { name: 'JavaScript', label: 'Expert' },
+    react: { name: 'React', label: '2 ans en production' },
+    typescript: { name: 'TypeScript', label: 'Mode strict · types partagés' },
+    javascript: { name: 'JavaScript', label: 'ES2020+ · au quotidien' },
     htmlcss: { name: 'HTML / CSS', label: 'Sémantique · Responsive' },
     tailwind: { name: 'Tailwind', label: 'Design system' },
-    vue: { name: 'Vue 2 & 3', label: 'Avancé' },
+    vue: { name: 'Vue 2 & 3', label: 'ERP Davidson en production' },
     git: { name: 'Git / GitHub', label: 'Versioning · Revue' },
     vercel: { name: 'Vercel', label: 'Déploiement continu' },
     figma: { name: 'Figma', label: 'Design → code' },
@@ -264,12 +266,12 @@ const SKILL_TEXT: Record<Lang, Record<string, { name: string; label: string }>> 
     reverse: { name: 'Reverse Engineering', label: 'Binary' },
     asm: { name: 'Assembly', label: 'x86' },
     // Front-end
-    react: { name: 'React', label: 'Expert · 2 yrs in prod' },
-    typescript: { name: 'TypeScript', label: 'Advanced' },
-    javascript: { name: 'JavaScript', label: 'Expert' },
+    react: { name: 'React', label: '2 years in production' },
+    typescript: { name: 'TypeScript', label: 'Strict mode · shared types' },
+    javascript: { name: 'JavaScript', label: 'ES2020+ · daily' },
     htmlcss: { name: 'HTML / CSS', label: 'Semantic · Responsive' },
     tailwind: { name: 'Tailwind', label: 'Design system' },
-    vue: { name: 'Vue 2 & 3', label: 'Advanced' },
+    vue: { name: 'Vue 2 & 3', label: 'Davidson ERP in production' },
     git: { name: 'Git / GitHub', label: 'Versioning · Review' },
     vercel: { name: 'Vercel', label: 'Continuous deployment' },
     figma: { name: 'Figma', label: 'Design → code' },
@@ -694,7 +696,7 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     aboutLabel: '01 — À propos',
     aboutJourneyLabel: 'Parcours',
     skillsLabel: '02 — Compétences',
-    projectsTitle: 'Projets',
+    projectsLabel: '03 — Projets',
     projectsShown: 'projet(s) affiché(s)',
     projectsEmpty: 'Aucun projet dans cette catégorie pour le moment.',
     projectsIssueLabel: 'Projet',
@@ -707,13 +709,24 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     categoryLab: 'Lab',
     categoryFeature: 'Projet',
     projectCta: 'Voir le projet',
-    projectCtaDetails: 'Voir le détail',
-    videosLabel: '06 — Vidéos',
+    projectCtaDetails: 'Lire l’étude de cas',
+    projectConfidential: 'Travail client · sous NDA',
+    projectConfidentialNote: 'Étude de cas détaillée à l’intérieur',
+    videosLabel: '04 — Vidéos',
     videosHeading: 'Côté créatif',
     videosSubtitle:
       'En dehors de la tech, je monte des courts-métrages : rythme, cadrage, narration. Une autre façon d’aiguiser l’œil et la rigueur.',
-    contactLabel: '04 — Contact',
+    contactLabel: '05 — Contact',
     contactTitle: 'Travaillons<br><em>ensemble</em>.',
+    skipToContent: 'Aller au contenu',
+    menuOpen: 'Menu',
+    menuClose: 'Fermer',
+    menuToggleLabel: 'Ouvrir ou fermer le menu de navigation',
+    menuCloseLabel: 'Fermer le menu de navigation',
+    closeModalLabel: 'Fermer la fenêtre',
+    previousVideoLabel: 'Vidéo précédente',
+    nextVideoLabel: 'Vidéo suivante',
+    projectFiltersLabel: 'Filtrer les projets par catégorie',
   },
   en: {
     navLinks: [
@@ -729,7 +742,7 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     aboutLabel: '01 — About',
     aboutJourneyLabel: 'Journey',
     skillsLabel: '02 — Skills',
-    projectsTitle: 'Selected Work',
+    projectsLabel: '03 — Selected Work',
     projectsShown: 'project(s) shown',
     projectsEmpty: 'No project in this category yet.',
     projectsIssueLabel: 'Issue',
@@ -742,13 +755,24 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     categoryLab: 'Lab',
     categoryFeature: 'Feature',
     projectCta: 'View project',
-    projectCtaDetails: 'View details',
-    videosLabel: '06 — Videos',
+    projectCtaDetails: 'Read the case study',
+    projectConfidential: 'Client work · under NDA',
+    projectConfidentialNote: 'Detailed case study inside',
+    videosLabel: '04 — Videos',
     videosHeading: 'Creative side',
     videosSubtitle:
       'Outside tech, I edit short films: rhythm, framing, storytelling. Another way to sharpen the eye and the rigor.',
-    contactLabel: '04 — Contact',
+    contactLabel: '05 — Contact',
     contactTitle: "Let's<br><em>work</em><br>together.",
+    skipToContent: 'Skip to content',
+    menuOpen: 'Menu',
+    menuClose: 'Close',
+    menuToggleLabel: 'Toggle navigation menu',
+    menuCloseLabel: 'Close navigation menu',
+    closeModalLabel: 'Close dialog',
+    previousVideoLabel: 'Previous video',
+    nextVideoLabel: 'Next video',
+    projectFiltersLabel: 'Filter projects by category',
   },
 };
 
@@ -841,6 +865,22 @@ const CASE_STUDY_HEADINGS: Record<Lang, CaseStudyHeadings> = {
   },
 };
 
+/*
+ * A recruiter skims a case study for numbers before reading its prose, and
+ * these two are the only paid production work on the site. Every entry below
+ * therefore accepts an optional `metrics` array, rendered as a stat row above
+ * the prose:
+ *
+ *   metrics: [
+ *     { value: '12', label: 'composants publiés' },
+ *     { value: '~40%', label: 'de couverture Jest' },
+ *   ],
+ *
+ * They are deliberately left empty rather than estimated — an invented figure
+ * on a job application is worse than none. Fill them in with what is actually
+ * known: components in react-playmakers, screens shipped, team size, coverage,
+ * before/after timings.
+ */
 const CASE_STUDIES: Record<Lang, Record<string, CaseStudy>> = {
   fr: {
     'playmakers-professional': {
@@ -932,7 +972,6 @@ export function getContent(lang: Lang, profile: Profile): LocalizedContent {
   const skills: Skill[] = SKILLS_META[profile].map((meta) => ({
     id: meta.id,
     icon: meta.icon,
-    level: meta.level,
     group: meta.group,
     name: SKILL_TEXT[lang][meta.id].name,
     label: SKILL_TEXT[lang][meta.id].label,

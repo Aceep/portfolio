@@ -84,7 +84,12 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
    */
   const renderCardBody = (project: Project, ctaLabel: string | null) => (
     <>
-      <ProjectGallery preview={project.preview} projectName={project.name} />
+      <ProjectGallery
+        preview={project.preview}
+        confidential={project.category === 'professional'}
+        confidentialLabel={ui.projectConfidential}
+        confidentialNote={ui.projectConfidentialNote}
+      />
       <div className="project-content">
         <div className="project-cover-header">
           <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>
@@ -110,10 +115,8 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
 
   return (
     <>
-      <section id="projects" className="projects-section">
-        <SectionLabel>
-          03 — {ui.projectsTitle}
-        </SectionLabel>
+      <section id="projects" className="projects-section" aria-labelledby="projects-heading">
+        <SectionLabel as="h2" id="projects-heading">{ui.projectsLabel}</SectionLabel>
 
         <div className="projects-header">
           <p className="projects-kicker">{ui.projectsKicker}</p>
@@ -125,7 +128,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
           </div>
         </div>
 
-        <div className="projects-filters" role="tablist" aria-label="Project category filters">
+        <div className="projects-filters" role="tablist" aria-label={ui.projectFiltersLabel}>
           {filterOptions.map((filter, index) => (
             <button
               key={filter.key}
@@ -147,7 +150,20 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
           ))}
         </div>
 
-        <div key={activeFilter} className="projects-grid" id="projects-grid-panel" role="tabpanel" aria-live="polite">
+        {/*
+          No aria-live here: the count above is already a polite live region,
+          and two of them announced every filter change twice. `tabIndex={0}`
+          makes the panel itself reachable once the tabs are left, which is
+          what the tab pattern expects.
+        */}
+        <div
+          key={activeFilter}
+          className="projects-grid"
+          id="projects-grid-panel"
+          role="tabpanel"
+          tabIndex={0}
+          aria-labelledby={`projects-filter-${activeFilter}`}
+        >
           {filteredProjects.length === 0 && (
             <p className="projects-empty">{ui.projectsEmpty}</p>
           )}
@@ -168,6 +184,23 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
               );
             }
 
+            const cardBody = (
+              <div className="project-card" style={{ ['--cover-index' as string]: index } as React.CSSProperties}>
+                {renderCardBody(project, project.link ? ui.projectCta : null)}
+              </div>
+            );
+
+            // A card with nowhere to go is not a link. Rendering an <a> with no
+            // href and killing it with pointer-events still shipped it to the
+            // accessibility tree as a broken link.
+            if (!project.link) {
+              return (
+                <div key={project.id} className="project-card-link">
+                  {cardBody}
+                </div>
+              );
+            }
+
             return (
               <a
                 key={project.id}
@@ -175,11 +208,8 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="project-card-link"
-                style={{ pointerEvents: project.link ? 'auto' : 'none' }}
               >
-                <div className="project-card" style={{ ['--cover-index' as string]: index } as React.CSSProperties}>
-                  {renderCardBody(project, project.link ? ui.projectCta : null)}
-                </div>
+                {cardBody}
               </a>
             );
           })}

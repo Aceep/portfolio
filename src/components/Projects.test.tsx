@@ -125,6 +125,53 @@ describe('Projects', () => {
     expect(document.body).not.toHaveStyle({ overflow: 'hidden' });
   });
 
+  // Regression: the dialog used to leave focus wherever it was, so Tab walked
+  // straight out into the page behind it and closing dropped focus on <body>.
+  it('moves focus into the case study, keeps it there, and hands it back', async () => {
+    const user = userEvent.setup();
+    renderProjects();
+
+    const opener = screen.getByRole('button', { name: /PlayMakers/ });
+    await user.click(opener);
+
+    const dialog = screen.getByRole('dialog');
+    const close = within(dialog).getByRole('button', { name: content.ui.closeModalLabel });
+    expect(close).toHaveFocus();
+
+    // The close button is the only focusable element in the dialog, so Tab in
+    // either direction has to come back to it rather than escaping.
+    await user.tab();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+
+    await user.tab({ shift: true });
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+
+    await user.keyboard('{Escape}');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(opener).toHaveFocus();
+  });
+
+  it('labels the close control in the active language', async () => {
+    const user = userEvent.setup();
+    renderProjects();
+
+    await user.click(screen.getByRole('button', { name: /PlayMakers/ }));
+
+    // French bundle: the label used to be hardcoded English.
+    expect(content.ui.closeModalLabel).toBe('Fermer la fenêtre');
+    expect(
+      within(screen.getByRole('dialog')).getByRole('button', { name: 'Fermer la fenêtre' })
+    ).toBeInTheDocument();
+  });
+
+  it('renders a project with no link as plain content, not a broken link', () => {
+    renderProjects([{ ...PROJECTS[1], link: undefined }]);
+
+    expect(screen.queryByRole('link', { name: /Shifumi/ })).not.toBeInTheDocument();
+    expect(within(grid()).getByText('Shifumi')).toBeInTheDocument();
+  });
+
   it('falls back to a placeholder when a modal project has no case study', async () => {
     const user = userEvent.setup();
     renderProjects([{ ...PROJECTS[0], id: 'not-written-yet' }]);
