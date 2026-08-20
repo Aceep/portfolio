@@ -80,6 +80,26 @@ describe.each(COMBINATIONS)('getContent($lang, $profile)', ({ lang, profile }) =
     expect(malformed).toEqual([]);
   });
 
+  it('keeps the cross-link off the front-end pitch and pointing home from cyber', () => {
+    // `/` is the primary pitch: advertising a parallel career track in its
+    // footer reads as divided commitment. `/cyber` still links back, so the
+    // two positionings are not isolated from each other.
+    if (profile === 'frontend') {
+      expect(content.ui.otherProfileLabel).toBeUndefined();
+      expect(content.ui.otherProfileHref).toBeUndefined();
+    } else {
+      expect(content.ui.otherProfileLabel).toBeTruthy();
+      expect(content.ui.otherProfileHref).toBe('/');
+    }
+  });
+
+  it('states the same degree level the CV does', () => {
+    // The CV reads "Architecte en technologie du numérique — Bac +4".
+    const master = content.experience.find((entry) => entry.id === 'master');
+    expect(master).toBeDefined();
+    expect(master?.role).not.toMatch(/Bac \+5|MSc/);
+  });
+
   it('gives every video a poster and a title', () => {
     const incomplete = content.videos.filter((v) => !v.poster || !v.title).map((v) => v.id);
     expect(incomplete).toEqual([]);
