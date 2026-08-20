@@ -21,7 +21,9 @@ const [firstNavLink] = fr.ui.navLinks;
 
 describe('Navigation', () => {
   beforeEach(() => {
-    localStorage.clear();
+    // jsdom reports en-US, and the provider now honours the browser locale on
+    // a first visit. These assertions are written against the French bundle.
+    localStorage.setItem('portfolio-lang', 'fr');
   });
 
   it('labels the menu control in the active language, not in English', () => {

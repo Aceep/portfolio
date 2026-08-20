@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Projects } from './Projects';
@@ -44,6 +44,13 @@ const grid = () => screen.getByRole('tabpanel');
 const tab = (name: RegExp) => screen.getByRole('tab', { name });
 
 describe('Projects', () => {
+  beforeEach(() => {
+    // The provider now honours the browser locale on a first visit, and jsdom
+    // reports en-US. These assertions are written against the French bundle,
+    // so state the choice explicitly rather than depending on the default.
+    localStorage.setItem('portfolio-lang', 'fr');
+  });
+
   it('shows every project under the default filter', () => {
     renderProjects();
 
