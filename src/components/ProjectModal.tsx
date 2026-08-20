@@ -126,6 +126,17 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
               <span className="modal-meta-pill">{study.duration}</span>
             </div>
 
+            {study.metrics && study.metrics.length > 0 && (
+              <dl className="modal-metrics">
+                {study.metrics.map((metric) => (
+                  <div key={metric.label} className="modal-metric">
+                    <dt className="modal-metric-value">{metric.value}</dt>
+                    <dd className="modal-metric-label">{metric.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+
             <div className="modal-section">
               <h3>{headings.context}</h3>
               <p>{study.context}</p>

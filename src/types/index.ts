@@ -46,11 +46,25 @@ export interface Project {
  * Long-form detail for a project rendered in the modal.
  * Only projects flagged `modal: true` have one.
  */
+/** One headline number, shown as a stat tile above the prose. */
+export interface CaseStudyMetric {
+  /** The number itself — "12", "~40%", "3 → 1". */
+  value: string;
+  /** What it counts, in a few words. */
+  label: string;
+}
+
 export interface CaseStudy {
   title: string;
   kicker: string;
   role: string;
   duration: string;
+  /**
+   * Quantified outcomes. Optional, because a case study without real numbers
+   * is better than one with invented ones — but a recruiter skims for these
+   * before reading a word of the prose, so fill them in where you can.
+   */
+  metrics?: CaseStudyMetric[];
   context: string;
   challenge: string;
   approach: string[];
@@ -145,6 +159,9 @@ export interface UIStrings {
   projectCta: string;
   /** Call to action on project cards that open the detail modal. */
   projectCtaDetails: string;
+  /** Shown in place of a screenshot on client work that cannot be shown. */
+  projectConfidential: string;
+  projectConfidentialNote: string;
   focusLabel: string;
   videosLabel: string;
   videosHeading: string;
