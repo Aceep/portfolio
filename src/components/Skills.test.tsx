@@ -1,8 +1,7 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { render, screen, within } from '@testing-library/react';
 import { Skills } from './Skills';
 import { getContent } from '../constants/content';
-import { MockIntersectionObserver } from '../test/setup';
 import type { Skill, SkillGroup } from '../types';
 
 const { ui } = getContent('fr', 'frontend');
@@ -13,19 +12,12 @@ const GROUPS: SkillGroup[] = [
 ];
 
 const SKILLS: Skill[] = [
-  { id: 'react', name: 'React', icon: '❖', level: 90, label: 'Expérimentée', group: 'core' },
-  { id: 'ts', name: 'TypeScript', icon: '◈', level: 88, label: 'Expérimentée', group: 'core' },
-  { id: 'git', name: 'Git', icon: '◆', level: 80, label: 'Outils', group: 'tooling' },
+  { id: 'react', name: 'React', icon: '❖', label: '2 ans en production', group: 'core' },
+  { id: 'ts', name: 'TypeScript', icon: '◈', label: 'Mode strict', group: 'core' },
+  { id: 'git', name: 'Git', icon: '◆', label: 'Versioning · Revue', group: 'tooling' },
 ];
 
-const observer = () =>
-  MockIntersectionObserver.instances[MockIntersectionObserver.instances.length - 1];
-
 describe('Skills', () => {
-  beforeEach(() => {
-    MockIntersectionObserver.instances = [];
-  });
-
   it('groups skills under the headings the profile declares', () => {
     render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
@@ -41,34 +33,39 @@ describe('Skills', () => {
     expect(screen.queryByRole('heading', { name: 'Outils' })).not.toBeInTheDocument();
   });
 
-  // Regression: the hook returns the ref that must be observed. It used to be
-  // discarded in favour of a second, unrelated ref, so nothing was ever
-  // observed and the bars never animated — silently, since the markup was fine.
-  it('observes the section it rendered', () => {
+  // The section used to have no h2 at all: the label was a <div>, so the page
+  // jumped h1 -> h3 here and the <section> had no accessible name.
+  it('titles the section with a heading the region is named by', () => {
     const { container } = render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
-    expect(observer()?.observed).toEqual([container.querySelector('#skills')]);
+    const region = container.querySelector('#skills');
+    const heading = screen.getByRole('heading', { level: 2, name: ui.skillsLabel });
+
+    expect(heading).toHaveAttribute('id', 'skills-heading');
+    expect(region).toHaveAttribute('aria-labelledby', 'skills-heading');
   });
 
-  it('replays the bars from zero once the section scrolls into view', () => {
+  it('states the evidence behind each skill instead of a score', () => {
     const { container } = render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
-    const bars = () =>
-      Array.from(container.querySelectorAll<HTMLElement>('.skill-level-fill')).map(
-        (bar) => bar.style.width
-      );
 
-    expect(bars()).toEqual(['90%', '88%', '80%']);
+    expect(screen.getByText('2 ans en production')).toBeInTheDocument();
+    expect(screen.getByText('Versioning · Revue')).toBeInTheDocument();
 
-    observer()?.trigger();
-
-    expect(bars()).toEqual(['0%', '0%', '0%']);
+    // Regression: self-declared percentage bars carried no accessible value
+    // and no verifiable claim. Nothing should reintroduce them.
+    expect(container.querySelector('.skill-level')).toBeNull();
+    expect(container.querySelector('.skill-level-fill')).toBeNull();
   });
 
-  it('stops observing after the first pass, so scrolling back does not replay it', () => {
-    render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
+  it('keeps every skill card readable as name plus evidence', () => {
+    const { container } = render(<Skills skills={SKILLS} groups={GROUPS} ui={ui} />);
 
-    observer()?.trigger();
+    const cards = Array.from(container.querySelectorAll<HTMLElement>('.skill-card'));
+    expect(cards).toHaveLength(SKILLS.length);
 
-    expect(observer()?.unobserve).toHaveBeenCalledTimes(1);
+    cards.forEach((card, index) => {
+      expect(within(card).getByText(SKILLS[index].name)).toBeInTheDocument();
+      expect(within(card).getByText(SKILLS[index].label)).toBeInTheDocument();
+    });
   });
 });

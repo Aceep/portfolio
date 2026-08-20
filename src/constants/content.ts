@@ -33,37 +33,39 @@ import type {
 interface SkillMeta {
   id: string;
   icon: string;
-  level: number;
   group: string;
 }
 
 // Order = display order within each group.
-// NOTE (levels): derived from the CV's own tiers — "Expérimentée" ≈ 85-90,
-// "Outils" ≈ 72-85, "Familière" ≈ 55-65. Adjust freely, they are editorial.
+//
+// There is deliberately no proficiency score here. A self-declared "React 90%"
+// is unfalsifiable and widely discounted by the people this page is written
+// for; the evidence lives in SKILL_TEXT[lang][id].label instead, where it can
+// name the work it came from.
 const SKILLS_META: Record<Profile, SkillMeta[]> = {
   frontend: [
-    { id: 'react', icon: '❖', level: 90, group: 'core' },
-    { id: 'javascript', icon: '◇', level: 90, group: 'core' },
-    { id: 'typescript', icon: '◈', level: 88, group: 'core' },
-    { id: 'htmlcss', icon: '◧', level: 88, group: 'core' },
-    { id: 'tailwind', icon: '≋', level: 85, group: 'core' },
-    { id: 'vue', icon: '△', level: 75, group: 'core' },
-    { id: 'git', icon: '⬡', level: 85, group: 'tooling' },
-    { id: 'vercel', icon: '▲', level: 80, group: 'tooling' },
-    { id: 'figma', icon: '✦', level: 78, group: 'tooling' },
-    { id: 'jest', icon: '✓', level: 72, group: 'tooling' },
-    { id: 'threejs', icon: '◉', level: 65, group: 'tooling' },
+    { id: 'react', icon: '❖', group: 'core' },
+    { id: 'javascript', icon: '◇', group: 'core' },
+    { id: 'typescript', icon: '◈', group: 'core' },
+    { id: 'htmlcss', icon: '◧', group: 'core' },
+    { id: 'tailwind', icon: '≋', group: 'core' },
+    { id: 'vue', icon: '△', group: 'core' },
+    { id: 'git', icon: '⬡', group: 'tooling' },
+    { id: 'vercel', icon: '▲', group: 'tooling' },
+    { id: 'figma', icon: '✦', group: 'tooling' },
+    { id: 'jest', icon: '✓', group: 'tooling' },
+    { id: 'threejs', icon: '◉', group: 'tooling' },
   ],
   cyber: [
-    { id: 'linux', icon: '⬢', level: 78, group: 'cyber' },
-    { id: 'reseau', icon: '⇄', level: 72, group: 'cyber' },
-    { id: 'gdb', icon: '▤', level: 66, group: 'cyber' },
-    { id: 'reverse', icon: '⟲', level: 62, group: 'cyber' },
-    { id: 'asm', icon: '⌗', level: 58, group: 'cyber' },
-    { id: 'react', icon: '❖', level: 90, group: 'dev' },
-    { id: 'typescript', icon: '◈', level: 88, group: 'dev' },
-    { id: 'javascript', icon: '◇', level: 90, group: 'dev' },
-    { id: 'vue', icon: '△', level: 75, group: 'dev' },
+    { id: 'linux', icon: '⬢', group: 'cyber' },
+    { id: 'reseau', icon: '⇄', group: 'cyber' },
+    { id: 'gdb', icon: '▤', group: 'cyber' },
+    { id: 'reverse', icon: '⟲', group: 'cyber' },
+    { id: 'asm', icon: '⌗', group: 'cyber' },
+    { id: 'react', icon: '❖', group: 'dev' },
+    { id: 'typescript', icon: '◈', group: 'dev' },
+    { id: 'javascript', icon: '◇', group: 'dev' },
+    { id: 'vue', icon: '△', group: 'dev' },
   ],
 };
 
@@ -244,12 +246,12 @@ const SKILL_TEXT: Record<Lang, Record<string, { name: string; label: string }>> 
     reverse: { name: 'Reverse Engineering', label: 'Binaire' },
     asm: { name: 'Assembleur', label: 'x86' },
     // Front-end
-    react: { name: 'React', label: 'Expert · 2 ans en prod' },
-    typescript: { name: 'TypeScript', label: 'Avancé' },
-    javascript: { name: 'JavaScript', label: 'Expert' },
+    react: { name: 'React', label: '2 ans en production' },
+    typescript: { name: 'TypeScript', label: 'Mode strict · types partagés' },
+    javascript: { name: 'JavaScript', label: 'ES2020+ · au quotidien' },
     htmlcss: { name: 'HTML / CSS', label: 'Sémantique · Responsive' },
     tailwind: { name: 'Tailwind', label: 'Design system' },
-    vue: { name: 'Vue 2 & 3', label: 'Avancé' },
+    vue: { name: 'Vue 2 & 3', label: 'ERP Davidson en production' },
     git: { name: 'Git / GitHub', label: 'Versioning · Revue' },
     vercel: { name: 'Vercel', label: 'Déploiement continu' },
     figma: { name: 'Figma', label: 'Design → code' },
@@ -264,12 +266,12 @@ const SKILL_TEXT: Record<Lang, Record<string, { name: string; label: string }>> 
     reverse: { name: 'Reverse Engineering', label: 'Binary' },
     asm: { name: 'Assembly', label: 'x86' },
     // Front-end
-    react: { name: 'React', label: 'Expert · 2 yrs in prod' },
-    typescript: { name: 'TypeScript', label: 'Advanced' },
-    javascript: { name: 'JavaScript', label: 'Expert' },
+    react: { name: 'React', label: '2 years in production' },
+    typescript: { name: 'TypeScript', label: 'Strict mode · shared types' },
+    javascript: { name: 'JavaScript', label: 'ES2020+ · daily' },
     htmlcss: { name: 'HTML / CSS', label: 'Semantic · Responsive' },
     tailwind: { name: 'Tailwind', label: 'Design system' },
-    vue: { name: 'Vue 2 & 3', label: 'Advanced' },
+    vue: { name: 'Vue 2 & 3', label: 'Davidson ERP in production' },
     git: { name: 'Git / GitHub', label: 'Versioning · Review' },
     vercel: { name: 'Vercel', label: 'Continuous deployment' },
     figma: { name: 'Figma', label: 'Design → code' },
@@ -950,7 +952,6 @@ export function getContent(lang: Lang, profile: Profile): LocalizedContent {
   const skills: Skill[] = SKILLS_META[profile].map((meta) => ({
     id: meta.id,
     icon: meta.icon,
-    level: meta.level,
     group: meta.group,
     name: SKILL_TEXT[lang][meta.id].name,
     label: SKILL_TEXT[lang][meta.id].label,

@@ -11,7 +11,7 @@ export interface Skill {
   id: string;
   name: string;
   icon: string;
-  level: number;
+  /** What backs the skill — the work it came from, not a self-assigned score. */
   label: string;
   /** Key of the owning group; the set of groups is declared per profile. */
   group: string;
