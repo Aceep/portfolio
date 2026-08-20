@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 
 // Testing Library only auto-registers this when Vitest globals are on, and
 // they are off here so tests import what they use.
@@ -41,19 +41,30 @@ class MockIntersectionObserver implements IntersectionObserver {
 
 vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
 
-// The custom cursor asks about pointer capabilities on mount.
-vi.stubGlobal(
-  'matchMedia',
-  vi.fn().mockImplementation((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  }))
-);
+/**
+ * The custom cursor asks about pointer capabilities on mount.
+ *
+ * Re-installed before every test, not once per file: `restoreMocks` in
+ * vite.config.ts resets mock implementations after each test, which would
+ * leave `matchMedia` returning undefined from the second test onwards — and
+ * anything rendering <Cursor /> would throw on `.matches`.
+ */
+const stubMatchMedia = () =>
+  vi.stubGlobal(
+    'matchMedia',
+    vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }))
+  );
+
+stubMatchMedia();
+beforeEach(stubMatchMedia);
 
 export { MockIntersectionObserver };
