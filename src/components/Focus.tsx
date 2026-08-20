@@ -14,8 +14,8 @@ interface FocusProps {
  */
 export const Focus: React.FC<FocusProps> = ({ pillars, label }) => {
   return (
-    <section id="focus" className="focus-section">
-      <SectionLabel>{label}</SectionLabel>
+    <section id="focus" className="focus-section" aria-labelledby="focus-heading">
+      <SectionLabel as="h2" id="focus-heading">{label}</SectionLabel>
 
       <div className="focus-grid">
         {pillars.map((pillar, index) => (

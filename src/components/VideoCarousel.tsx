@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import type { Video } from '../types';
+import type { Video, UIStrings } from '../types';
 import '../styles/components/VideoCarousel.css';
 
 interface VideoCarouselProps {
   videos: Video[];
+  ui: UIStrings;
 }
 
 /**
@@ -14,7 +15,7 @@ interface VideoCarouselProps {
  * heaviest assets on the page, so the thumbnail strip uses poster images
  * rather than a second set of media elements.
  */
-export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos }) => {
+export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, ui }) => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -36,6 +37,14 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos }) => {
   return (
     <div className="video-carousel">
       <div className="video-player">
+        {/*
+          No <track> yet: these are the original short films and captioning
+          them means transcribing the dialogue, not generating a stub. Shipping
+          an empty caption track would satisfy the linter while telling a
+          screen-reader user a caption exists when it does not. Tracked in the
+          README's known limitations.
+        */}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
           ref={videoRef}
           key={selectedVideo.id}
@@ -72,10 +81,10 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos }) => {
       </div>
 
       <div className="carousel-controls">
-        <button className="carousel-arrow prev" onClick={handlePrevious} aria-label="Previous video">
+        <button className="carousel-arrow prev" onClick={handlePrevious} aria-label={ui.previousVideoLabel}>
           ←
         </button>
-        <button className="carousel-arrow next" onClick={handleNext} aria-label="Next video">
+        <button className="carousel-arrow next" onClick={handleNext} aria-label={ui.nextVideoLabel}>
           →
         </button>
       </div>

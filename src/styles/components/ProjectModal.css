@@ -10,6 +10,22 @@
   animation: fadeIn 280ms var(--ease-standard);
 }
 
+/*
+ * Full-bleed dismiss target sitting behind the dialog. Transparent and
+ * borderless: it is the backdrop, visually — it just happens to be a real
+ * button so the click handler lives on something focusable-by-nature.
+ */
+.modal-backdrop-dismiss {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: none;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
