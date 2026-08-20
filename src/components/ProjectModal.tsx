@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import '../styles/components/ProjectModal.css';
 
@@ -18,44 +18,97 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, pro
   const headings = c.caseStudyHeadings;
   const study = c.caseStudies[projectId];
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  /** Everything inside the dialog that can hold focus, in document order. */
+  const focusables = () =>
+    Array.from(
+      containerRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      ) ?? []
+    );
+
   useEffect(() => {
     if (!isOpen) {
       return;
     }
 
-    const handleEscape = (event: KeyboardEvent) => {
+    // Where focus came from, so it can be handed back on close. Without this,
+    // dismissing the dialog drops the caret on <body> and a keyboard user
+    // restarts from the top of the page.
+    const opener = document.activeElement as HTMLElement | null;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
+        return;
+      }
+
+      if (event.key !== 'Tab') {
+        return;
+      }
+
+      // Confine Tab to the dialog: without this the next stop is the page
+      // behind it, which is still scrolled and still interactive.
+      const elements = focusables();
+      if (elements.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && (active === first || !containerRef.current?.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleEscape);
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Move focus in, so the first Tab happens inside the dialog rather than
+    // behind it.
+    focusables()[0]?.focus();
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('keydown', handleKeyDown);
+      opener?.focus?.();
     };
   }, [isOpen, onClose]);
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop" onClick={handleBackdropClick}>
+    <div className="modal-backdrop">
+      {/*
+        A real <button> rather than a click handler on the backdrop div: it is
+        the same mouse affordance, but it satisfies the a11y tree instead of
+        fighting it. Hidden from assistive tech and skipped by Tab, because the
+        keyboard path out of the dialog is Escape and the labelled close button
+        below — announcing a second, identical "close" control would be noise.
+      */}
+      <button
+        className="modal-backdrop-dismiss"
+        onClick={onClose}
+        tabIndex={-1}
+        aria-hidden="true"
+      />
       <div
         className="modal-container"
+        ref={containerRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={study ? 'modal-title' : undefined}
       >
-        <button className="modal-close" onClick={onClose} aria-label="Close modal">
+        <button className="modal-close" onClick={onClose} aria-label={c.ui.closeModalLabel}>
           ✕
         </button>
 

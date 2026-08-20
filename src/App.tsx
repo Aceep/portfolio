@@ -66,34 +66,44 @@ function App() {
       <div className="film-grain" aria-hidden="true" />
 
       <Cursor />
+
+      {/* First stop for a keyboard user: the nav is fixed and this is a
+          single-page site, so without it every visit starts by tabbing the
+          whole menu. */}
+      <a className="skip-link" href="#main">
+        {ui.skipToContent}
+      </a>
+
       <Navigation />
 
-      <Hero portfolio={portfolio} ui={ui} cvUrl={cvUrl} />
+      <main id="main">
+        <Hero portfolio={portfolio} ui={ui} cvUrl={cvUrl} />
 
-      <Marquee items={marquee} />
+        <Marquee items={marquee} />
 
-      <Focus pillars={focusPillars} label={ui.focusLabel} />
+        <Focus pillars={focusPillars} label={ui.focusLabel} />
 
-      <About
-        title={portfolio.aboutTitle}
-        description={portfolio.aboutDescription}
-        experience={experience}
-        label={ui.aboutLabel}
-        journeyLabel={ui.aboutJourneyLabel}
-      />
+        <About
+          title={portfolio.aboutTitle}
+          description={portfolio.aboutDescription}
+          experience={experience}
+          label={ui.aboutLabel}
+          journeyLabel={ui.aboutJourneyLabel}
+        />
 
-      <Skills skills={skills} groups={skillGroups} ui={ui} />
+        <Skills skills={skills} groups={skillGroups} ui={ui} />
 
-      <Projects projects={projects} ui={ui} />
+        <Projects projects={projects} ui={ui} />
 
-      <Videos videos={videos} ui={ui} />
+        <Videos videos={videos} ui={ui} />
 
-      <Contact
-        title={ui.contactTitle}
-        description={portfolio.contactAvailability}
-        contactLinks={contactLinks}
-        label={ui.contactLabel}
-      />
+        <Contact
+          title={ui.contactTitle}
+          description={portfolio.contactAvailability}
+          contactLinks={contactLinks}
+          label={ui.contactLabel}
+        />
+      </main>
 
       <Footer
         copyright={`© ${new Date().getFullYear()} — ${portfolio.name} — ${ui.footerRole}`}

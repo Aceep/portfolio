@@ -20,10 +20,10 @@ export const Contact: React.FC<ContactProps> = ({
   label,
 }) => {
   return (
-    <section id="contact">
+    <section id="contact" aria-labelledby="contact-heading">
       <div className="contact-left">
         <SectionLabel>{label}</SectionLabel>
-        <h2 className="contact-title" dangerouslySetInnerHTML={{ __html: title }} />
+        <h2 className="contact-title" id="contact-heading" dangerouslySetInnerHTML={{ __html: title }} />
         <p className="contact-body">{description}</p>
       </div>
 

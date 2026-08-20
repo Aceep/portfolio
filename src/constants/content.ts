@@ -714,6 +714,15 @@ const UI_SHARED: Record<Lang, SharedUI> = {
       'En dehors de la tech, je monte des courts-métrages : rythme, cadrage, narration. Une autre façon d’aiguiser l’œil et la rigueur.',
     contactLabel: '05 — Contact',
     contactTitle: 'Travaillons<br><em>ensemble</em>.',
+    skipToContent: 'Aller au contenu',
+    menuOpen: 'Menu',
+    menuClose: 'Fermer',
+    menuToggleLabel: 'Ouvrir ou fermer le menu de navigation',
+    menuCloseLabel: 'Fermer le menu de navigation',
+    closeModalLabel: 'Fermer la fenêtre',
+    previousVideoLabel: 'Vidéo précédente',
+    nextVideoLabel: 'Vidéo suivante',
+    projectFiltersLabel: 'Filtrer les projets par catégorie',
   },
   en: {
     navLinks: [
@@ -749,6 +758,15 @@ const UI_SHARED: Record<Lang, SharedUI> = {
       'Outside tech, I edit short films: rhythm, framing, storytelling. Another way to sharpen the eye and the rigor.',
     contactLabel: '05 — Contact',
     contactTitle: "Let's<br><em>work</em><br>together.",
+    skipToContent: 'Skip to content',
+    menuOpen: 'Menu',
+    menuClose: 'Close',
+    menuToggleLabel: 'Toggle navigation menu',
+    menuCloseLabel: 'Close navigation menu',
+    closeModalLabel: 'Close dialog',
+    previousVideoLabel: 'Previous video',
+    nextVideoLabel: 'Next video',
+    projectFiltersLabel: 'Filter projects by category',
   },
 };
 

@@ -23,8 +23,8 @@ export const Skills: React.FC<SkillsProps> = ({ skills, groups, ui }) => {
   );
 
   return (
-    <section id="skills" ref={sectionRef}>
-      <SectionLabel>{ui.skillsLabel}</SectionLabel>
+    <section id="skills" ref={sectionRef} aria-labelledby="skills-heading">
+      <SectionLabel as="h2" id="skills-heading">{ui.skillsLabel}</SectionLabel>
 
       {groups.map((group) => {
         const groupSkills = skills.filter((skill) => skill.group === group.key);

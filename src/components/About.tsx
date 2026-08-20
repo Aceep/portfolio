@@ -22,15 +22,15 @@ export const About: React.FC<AboutProps> = ({
   journeyLabel,
 }) => {
   return (
-    <section id="about">
+    <section id="about" aria-labelledby="about-heading">
       <div className="about-left">
         <SectionLabel>{label}</SectionLabel>
-        <h2 className="about-title">{title}</h2>
+        <h2 className="about-title" id="about-heading">{title}</h2>
         <p className="about-body">{description}</p>
       </div>
 
       <div className="about-right">
-        <SectionLabel>{journeyLabel}</SectionLabel>
+        <SectionLabel as="h3">{journeyLabel}</SectionLabel>
         {experience.map((exp) => (
           <div key={exp.id} className="exp-item">
             <div className="exp-year">{exp.year}</div>

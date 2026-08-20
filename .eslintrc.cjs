@@ -6,6 +6,9 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    // The homepage advertises accessibility as a skill. This turns that claim
+    // into something CI enforces rather than something a reviewer has to check.
+    'plugin:jsx-a11y/recommended',
   ],
   ignorePatterns: ['dist', 'node_modules', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',

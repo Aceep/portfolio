@@ -155,6 +155,22 @@ export interface UIStrings {
   /** Discreet cross-link to the other positioning of the site. */
   otherProfileLabel: string;
   otherProfileHref: string;
+
+  /*
+   * Assistive-technology strings. These used to be hardcoded English in the
+   * components, which meant the French site announced English labels — the one
+   * place the bilingual pipeline leaked. They live here like every other
+   * string, so `content.test.ts` covers them for free.
+   */
+  skipToContent: string;
+  menuOpen: string;
+  menuClose: string;
+  menuToggleLabel: string;
+  menuCloseLabel: string;
+  closeModalLabel: string;
+  previousVideoLabel: string;
+  nextVideoLabel: string;
+  projectFiltersLabel: string;
 }
 
 /**
