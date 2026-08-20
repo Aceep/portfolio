@@ -20,6 +20,8 @@ and it is the part of this repo worth reading.
 | React 18 + TypeScript | `strict`, `noUnusedLocals` and `noUnusedParameters` are on — the compiler is the first reviewer |
 | Vite | Instant HMR, and `tsc && vite build` fails the build on any type error |
 | Plain CSS, one file per component | The site is a dozen sections with heavy bespoke motion. A utility framework would have been more config than payoff; design tokens live as custom properties in `src/styles/App.css` |
+| Self-hosted fonts | Syne and Space Mono carry every heading and label. Linking Google Fonts put a render-blocking third-party stylesheet on the critical path; `scripts/vendor-fonts.mjs` vendors the latin subsets instead, and the built page makes no third-party requests |
+| `eslint-plugin-jsx-a11y` | The homepage lists accessibility as a skill. CI runs with `--max-warnings 0`, so that claim is enforced rather than asserted |
 | No router | Two routes, resolved from `window.location.pathname`. React Router would be ~10 kB to replace six lines (`src/i18n/profile.ts`) |
 | No state library | The only cross-cutting state is language + positioning, which is one context |
 
@@ -30,12 +32,13 @@ Runtime dependencies: `react` and `react-dom`. That is the whole list.
 ```bash
 npm ci
 npm run dev        # http://localhost:5173
-npm run build      # tsc && vite build → dist/
+npm run build      # tsc && vite build && build-routes → dist/
 npm run preview    # serve the production build
 
-npm test           # vitest, watch mode
-npm run test:run   # single pass, what CI runs
-npm run typecheck  # tsc --noEmit
+npm test            # vitest, watch mode
+npm run test:run    # single pass
+npm run test:coverage  # single pass + coverage thresholds, what CI runs
+npm run typecheck   # tsc --noEmit
 npm run lint
 ```
 
@@ -50,11 +53,11 @@ Docker, for a matching dev environment: `docker compose up`.
 src/
 ├── components/     # one presentational component per section + UI primitives
 ├── constants/      # content.ts — all copy, both languages, both positionings
-├── i18n/           # LanguageContext (state), profile.ts (routing), meta.ts (<head>)
-├── hooks/          # useCursorTracker, useIntersectionObserver
-├── styles/         # App.css (tokens + globals) + components/*.css
-├── types/          # every shape the content pipeline produces
-└── utils/
+├── i18n/           # LanguageContext (state), profile.ts (routing), meta.ts +
+│                   #   document-meta.json (<head>, shared with the build)
+├── hooks/          # useCursorTracker
+├── styles/         # App.css (tokens + globals), fonts.css, components/*.css
+└── types/          # every shape the content pipeline produces
 ```
 
 ### The content pipeline
@@ -73,8 +76,24 @@ the sequence stays contiguous whichever positioning is served. Components never
 reach into the tables; they receive resolved data.
 
 `LanguageProvider` resolves the positioning from the path once, memoizes the
-bundle, and persists the language choice to `localStorage`. Deep links to
-`/cyber` work because `vercel.json` rewrites unknown paths to `index.html`.
+bundle, and persists the language choice to `localStorage`. French is the
+default; a browser asking for anything else gets English on a first visit, and
+a stored choice always wins.
+
+### Two routes, two documents
+
+Scrapers and crawlers do not run JS, so the runtime `<head>` swap in
+`src/i18n/meta.ts` never reaches them. `npm run build` therefore ends with
+`scripts/build-routes.mjs`, which rewrites the built `index.html` for the
+cybersecurity positioning — title, description, both social descriptions,
+canonical, `og:url`, card and JSON-LD — and writes `dist/cyber.html`;
+`vercel.json` points `/cyber` at it. Both documents read their copy from
+`src/i18n/document-meta.json`, the same table the runtime uses, and every
+substitution is asserted: a miss fails the build rather than shipping the wrong
+pitch to everyone who sees the link.
+
+The body is still client-rendered. Fixing that means server-rendering the
+tree, which is the one item below that has not been done.
 
 ### Adding content
 
@@ -89,20 +108,33 @@ bundle, and persists the language choice to `localStorage`. Deep links to
 
 ## Testing
 
-Vitest + Testing Library, 62 tests. The suite is deliberately weighted towards
-the two places this codebase can break quietly:
+Vitest + Testing Library, 93 tests, with coverage reported and thresholded in
+CI (`npm run test:coverage`). The suite is weighted towards the places this
+codebase can break quietly:
 
 - **`src/constants/content.test.ts`** — runs every invariant against all four
-  `profile × lang` combinations: contiguous project numbering, no unresolved
-  text, no skill in an undeclared group, no group heading without skills, no
-  blank UI string, and a case study behind every project flagged `modal: true`.
-  The content tables are keyed by plain strings, so this is what turns a typo
-  into a failing test instead of an `undefined` on the page.
-- **`src/components/Skills.test.tsx`** and **`Projects.test.tsx`** — cover
-  filtering, keyboard navigation across the filter tabs, and the modal. Two
-  tests are explicit regressions: that the skills section is actually observed
-  (the animation hook returns the ref that must be attached, and a discarded
-  ref fails silently), and that an empty filter keeps the filter bar on screen.
+  `profile × lang` combinations: contiguous project numbering, contiguous
+  section labels, no unresolved text, no skill in an undeclared group, no group
+  heading without skills, no blank UI string, well-formed case-study metrics,
+  and a case study behind every project flagged `modal: true`. The content
+  tables are keyed by plain strings, so this is what turns a typo into a
+  failing test instead of an `undefined` on the page.
+- **`Projects.test.tsx`** — filtering, keyboard navigation across the filter
+  tabs, and the case-study dialog: that it takes focus, confines Tab, and hands
+  focus back to the card that opened it.
+- **`Navigation.test.tsx`** — the mobile menu, `aria-expanded`, the localised
+  labels and the language toggle. This component owned the keyboard bug that
+  went unnoticed precisely because it had no tests.
+- **`LanguageContext.test.tsx`** and **`meta.test.ts`** — locale resolution and
+  stored-preference precedence; per-route canonical, `og:url` and social card.
+- **`ErrorBoundary.test.tsx`** — that a throw renders a usable fallback rather
+  than a blank page, and that the fallback does not depend on the content
+  pipeline it is catching for.
+
+Several tests are explicit regressions and say so in a comment above them:
+the discarded observer ref, the empty filter that unmounted its own filter bar,
+the dialog that let focus escape, the linkless card that shipped a broken `<a>`,
+and the self-declared skill bars that carried no accessible value.
 
 `src/test/setup.ts` stubs `IntersectionObserver` and `matchMedia`, neither of
 which jsdom implements.
@@ -110,27 +142,39 @@ which jsdom implements.
 ## Scripts
 
 ```bash
-./scripts/optimize-media.sh          # re-encode the videos + extract poster frames (needs ffmpeg)
-python3 scripts/generate-og-card.py  # rebuild public/og-card.png (needs Pillow)
+./scripts/optimize-media.sh          # re-encode the videos + extract WebP posters (needs ffmpeg)
+python3 scripts/generate-og-card.py  # rebuild both social cards (needs Pillow)
+python3 scripts/generate-icons.py    # rebuild the favicon set (needs Pillow)
+python3 scripts/optimize-images.py   # re-encode previews and posters as WebP (needs Pillow)
+node scripts/vendor-fonts.mjs        # re-vendor the woff2 subsets + src/styles/fonts.css
+node scripts/build-routes.mjs        # emit dist/cyber.html (runs as part of npm run build)
 ```
 
 ## Known limitations
 
 Honest list, roughly in the order I would fix them:
 
-- **Coverage is targeted, not broad.** The content pipeline and the two
-  interactive components are tested; the mostly-static sections are not.
+- **The body is not server-rendered.** Both routes now ship their own `<head>`
+  (see *Two routes, two documents*), so link previews and crawler metadata are
+  correct per positioning — but the markup itself still arrives via JS. Real
+  prerendering means running the tree through `react-dom/server` at build time.
+- **The short films have no captions.** Captioning them means transcribing the
+  dialogue, and an empty `<track>` would tell a screen-reader user a caption
+  exists when it does not, so `jsx-a11y/media-has-caption` is disabled on that
+  one element with its reasoning next to it.
 - **One clip is still heavier than it should be.**
   `TroisFemmesDisparaissent_2_1.mp4` (3.4 MB) came from a low-bitrate 720p
   source, so re-encoding it made it larger and the script kept the original.
   It needs a pass from the master rather than from this file.
-- **Social previews are single-route.** Scrapers do not execute JS, so `/cyber`
-  previews with the front-end card. Real per-route previews need the two routes
-  prerendered at build time.
-- **The case-study modal has no focus trap.** It closes on Escape and on
-  backdrop click, and it is labelled, but focus is not confined or restored.
-- **No error boundary.** `getContent` and `useLanguage` both throw on misuse,
-  which currently means a blank page rather than a fallback.
+- **The case studies carry no numbers.** `CaseStudy` takes an optional
+  `metrics` array rendered as a stat row, and `content.ts` documents what to
+  put there. It is deliberately empty rather than estimated.
+- **Coverage is uneven.** 74% of statements, but the purely presentational
+  sections — Hero, Focus, Videos, Footer — are still untested, and the
+  threshold in `vite.config.ts` is set at the bar the suite already clears
+  rather than an aspirational one.
+- **The originals of the WebP assets are still in `public/`.** They are
+  unreferenced, so no visitor downloads them, but they are deployed.
 
 ## License
 
