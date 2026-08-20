@@ -20,11 +20,11 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
   const lastName = lastNameParts.join(' ');
 
   return (
-    <section id="hero">
+    <section id="hero" aria-labelledby="hero-heading">
       <div className="hero-left">
         <div className="hero-tag">{tagline}</div>
 
-        <h1 className="hero-name">
+        <h1 className="hero-name" id="hero-heading">
           <span className="solid">{firstName}</span>
           <span className="outline">{lastName}</span>
           <span className="job-title solid">{heroJobTitle}</span>
@@ -65,8 +65,11 @@ export const Hero: React.FC<HeroProps> = ({ portfolio, ui, cvUrl }) => {
           className="hero-kyle"
           width={455}
           height={548}
-          fetchPriority="high"
           decoding="async"
+          // React 18.2 does not map `fetchPriority` to an attribute and warns
+          // on it; the lowercase attribute is what the browser reads. Drop the
+          // spread when React is upgraded.
+          {...{ fetchpriority: 'high' }}
         />
 
         {/* Spinning badge */}
