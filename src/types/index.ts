@@ -161,7 +161,6 @@ export interface UIStrings {
   projectCtaDetails: string;
   /** Shown in place of a screenshot on client work that cannot be shown. */
   projectConfidential: string;
-  projectConfidentialNote: string;
   focusLabel: string;
   videosLabel: string;
   videosHeading: string;
