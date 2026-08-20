@@ -168,9 +168,16 @@ export interface UIStrings {
   contactLabel: string;
   contactTitle: string;
   footerRole: string;
-  /** Discreet cross-link to the other positioning of the site. */
-  otherProfileLabel: string;
-  otherProfileHref: string;
+  /**
+   * Discreet cross-link to the other positioning of the site.
+   *
+   * Optional, and deliberately absent on the front-end positioning: `/` is the
+   * primary pitch, and advertising a parallel career track in its footer reads
+   * as divided commitment to the audience it is written for. `/cyber` still
+   * links back, so the two are not isolated from each other.
+   */
+  otherProfileLabel?: string;
+  otherProfileHref?: string;
 
   /*
    * Assistive-technology strings. These used to be hardcoded English in the

@@ -301,7 +301,7 @@ const EXPERIENCE_TEXT: Record<Profile, Record<Lang, Experience[]>> = {
         id: 'master',
         year: 'En cours',
         company: 'École 42 — Master Sécurité & Administration Réseau',
-        role: '// Bac +5',
+        role: '// Bac +4',
       },
     ],
     en: [
@@ -321,7 +321,7 @@ const EXPERIENCE_TEXT: Record<Profile, Record<Lang, Experience[]>> = {
         id: 'master',
         year: 'Ongoing',
         company: "École 42 — Master's in Network Security & Administration",
-        role: '// MSc',
+        role: '// Bac +4',
       },
     ],
   },
@@ -796,8 +796,6 @@ const UI_BY_PROFILE: Record<Profile, Record<Lang, ProfileUI>> = {
         'Du travail livré en entreprise et des projets construits pour apprendre — React, Vue, TypeScript et un peu de 3D.',
       focusLabel: 'Ce que je fais',
       footerRole: 'Développeuse Front-End',
-      otherProfileLabel: 'Voir la version cybersécurité',
-      otherProfileHref: '/cyber',
     },
     en: {
       navAvailability: 'Full-time front-end · Sep 2026',
@@ -807,8 +805,6 @@ const UI_BY_PROFILE: Record<Profile, Record<Lang, ProfileUI>> = {
         'Work shipped on the job and projects built to learn — React, Vue, TypeScript and a bit of 3D.',
       focusLabel: 'What I do',
       footerRole: 'Front-End Developer',
-      otherProfileLabel: 'See the cybersecurity version',
-      otherProfileHref: '/cyber',
     },
   },
   cyber: {
