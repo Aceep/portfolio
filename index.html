@@ -101,11 +101,25 @@
       }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Fonts are self-hosted (scripts/vendor-fonts.mjs writes src/styles/fonts.css).
+      Linking fonts.googleapis.com here meant a render-blocking stylesheet on a
+      third-party origin — DNS, TLS and a round trip before first paint.
+      These two carry the headings and every mono label, so they are preloaded.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/syne-800-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/space-mono-400-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
   </head>
   <body>
