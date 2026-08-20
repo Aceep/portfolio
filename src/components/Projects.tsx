@@ -84,7 +84,12 @@ export const Projects: React.FC<ProjectsProps> = ({ projects, ui }) => {
    */
   const renderCardBody = (project: Project, ctaLabel: string | null) => (
     <>
-      <ProjectGallery preview={project.preview} projectName={project.name} />
+      <ProjectGallery
+        preview={project.preview}
+        confidential={project.category === 'professional'}
+        confidentialLabel={ui.projectConfidential}
+        confidentialNote={ui.projectConfidentialNote}
+      />
       <div className="project-content">
         <div className="project-cover-header">
           <div className="project-num">{ui.projectsIssueLabel} {project.number}</div>

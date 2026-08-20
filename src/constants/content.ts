@@ -709,7 +709,9 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     categoryLab: 'Lab',
     categoryFeature: 'Projet',
     projectCta: 'Voir le projet',
-    projectCtaDetails: 'Voir le détail',
+    projectCtaDetails: 'Lire l’étude de cas',
+    projectConfidential: 'Travail client · sous NDA',
+    projectConfidentialNote: 'Étude de cas détaillée à l’intérieur',
     videosLabel: '04 — Vidéos',
     videosHeading: 'Côté créatif',
     videosSubtitle:
@@ -753,7 +755,9 @@ const UI_SHARED: Record<Lang, SharedUI> = {
     categoryLab: 'Lab',
     categoryFeature: 'Feature',
     projectCta: 'View project',
-    projectCtaDetails: 'View details',
+    projectCtaDetails: 'Read the case study',
+    projectConfidential: 'Client work · under NDA',
+    projectConfidentialNote: 'Detailed case study inside',
     videosLabel: '04 — Videos',
     videosHeading: 'Creative side',
     videosSubtitle:
@@ -861,6 +865,22 @@ const CASE_STUDY_HEADINGS: Record<Lang, CaseStudyHeadings> = {
   },
 };
 
+/*
+ * A recruiter skims a case study for numbers before reading its prose, and
+ * these two are the only paid production work on the site. Every entry below
+ * therefore accepts an optional `metrics` array, rendered as a stat row above
+ * the prose:
+ *
+ *   metrics: [
+ *     { value: '12', label: 'composants publiés' },
+ *     { value: '~40%', label: 'de couverture Jest' },
+ *   ],
+ *
+ * They are deliberately left empty rather than estimated — an invented figure
+ * on a job application is worse than none. Fill them in with what is actually
+ * known: components in react-playmakers, screens shipped, team size, coverage,
+ * before/after timings.
+ */
 const CASE_STUDIES: Record<Lang, Record<string, CaseStudy>> = {
   fr: {
     'playmakers-professional': {
