@@ -3,7 +3,9 @@ FROM node:22-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+# `npm ci` and not `npm install`: the point of this image is an environment
+# that matches CI, and `install` is free to resolve past the lockfile.
+RUN npm ci
 
 COPY . .
 

@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 
+/** What the cursor grows over. Matched per event, not snapshotted. */
+const INTERACTIVE = 'a, button, .project-card, .skill-card, .contact-link';
+
 /**
  * Custom mouse cursor tracking hook
  * Tracks cursor position and manages hover states for interactive elements
@@ -17,53 +20,59 @@ export const useCursorTracker = () => {
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
+    // Position is written once per frame via the independent `translate`
+    // property: setting left/top per mousemove laid out the page on every
+    // pointer event, and writing `transform` here would clobber the centring
+    // and the .big scale that Cursor.css owns.
+    let frame = 0;
+    let x = 0;
+    let y = 0;
+
+    const paint = () => {
+      frame = 0;
+      cursor.style.translate = `${x}px ${y}px`;
     };
 
-    const handleHover = (isHovering: boolean) => {
-      if (isHovering) {
-        cursor.classList.add('big');
-      } else {
-        cursor.classList.remove('big');
+    const handleMouseMove = (event: MouseEvent) => {
+      x = event.clientX;
+      y = event.clientY;
+      if (!frame) {
+        frame = requestAnimationFrame(paint);
       }
     };
 
-    const interactiveElements = document.querySelectorAll(
-      'a, button, .project-card, .skill-card, .contact-link'
-    );
+    /*
+     * Delegated rather than bound to a snapshot of the matching nodes. The
+     * previous version queried once on mount, so every card remounted by the
+     * project filter — and everything inside the case-study modal — arrived
+     * without handlers, and the cursor quietly stopped reacting.
+     */
+    const handleOver = (event: MouseEvent) => {
+      if ((event.target as Element | null)?.closest?.(INTERACTIVE)) {
+        cursor.classList.add('big');
+      }
+    };
 
-    const enterHandlers = new Map<Element, EventListener>();
-    const leaveHandlers = new Map<Element, EventListener>();
+    const handleOut = (event: MouseEvent) => {
+      const from = (event.target as Element | null)?.closest?.(INTERACTIVE);
+      if (!from) return;
 
-    document.addEventListener('mousemove', handleMouseMove);
+      // Ignore moves that stay inside the same interactive element.
+      const to = (event.relatedTarget as Element | null)?.closest?.(INTERACTIVE);
+      if (to === from) return;
 
-    interactiveElements.forEach((el) => {
-      const onEnter = () => handleHover(true);
-      const onLeave = () => handleHover(false);
+      cursor.classList.remove('big');
+    };
 
-      enterHandlers.set(el, onEnter);
-      leaveHandlers.set(el, onLeave);
-
-      el.addEventListener('mouseenter', onEnter);
-      el.addEventListener('mouseleave', onLeave);
-    });
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.addEventListener('mouseover', handleOver);
+    document.addEventListener('mouseout', handleOut);
 
     return () => {
+      if (frame) cancelAnimationFrame(frame);
       document.removeEventListener('mousemove', handleMouseMove);
-      interactiveElements.forEach((el) => {
-        const onEnter = enterHandlers.get(el);
-        const onLeave = leaveHandlers.get(el);
-
-        if (onEnter) {
-          el.removeEventListener('mouseenter', onEnter);
-        }
-
-        if (onLeave) {
-          el.removeEventListener('mouseleave', onLeave);
-        }
-      });
+      document.removeEventListener('mouseover', handleOver);
+      document.removeEventListener('mouseout', handleOut);
     };
   }, []);
 

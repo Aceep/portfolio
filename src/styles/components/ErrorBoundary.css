@@ -1,0 +1,62 @@
+.error-boundary {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 2rem;
+  text-align: center;
+  background: var(--bg);
+  color: var(--text);
+  cursor: auto;
+}
+
+.error-boundary-kicker {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
+.error-boundary-title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+
+.error-boundary-body {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 46ch;
+}
+
+.error-boundary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+}
+
+.error-boundary-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.75rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: auto;
+}
+
+.error-boundary-link:hover,
+.error-boundary-link:focus-visible {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}

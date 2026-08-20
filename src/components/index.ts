@@ -10,6 +10,7 @@ export { Projects } from './Projects';
 export { Videos } from './Videos';
 export { Contact } from './Contact';
 export { Footer } from './Footer';
+export { ErrorBoundary } from './ErrorBoundary';
 
 // UI Components
 export { Button } from './Button';

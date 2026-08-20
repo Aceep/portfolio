@@ -18,6 +18,10 @@
 
     /* Linting */
     "strict": true,
+    /* Indexing an array or a record yields `T | undefined`. It is what turns
+       `videos[i]` and `filterOptions[i]` from silent runtime throws into
+       compile errors. */
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
