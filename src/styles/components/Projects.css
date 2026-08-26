@@ -339,6 +339,8 @@
 
   .projects-grid {
     grid-template-columns: 1fr;
+    /* One column: equal rows would give every card the tallest card's height. */
+    grid-auto-rows: auto;
     gap: 1.25rem;
   }
 

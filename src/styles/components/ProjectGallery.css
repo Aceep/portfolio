@@ -45,20 +45,45 @@
   transform: scale(1.14) translateY(-8px);
 }
 
+/*
+ * Mobile: the preview becomes a real image at the top of the card.
+ *
+ * The hover backdrop has no hover to answer to on a phone. Its earlier
+ * mobile form — the screenshot at 50% opacity underneath the copy — read as
+ * text printed over a photo (issue #2). Here the gallery leaves absolute
+ * positioning and takes the slot in flow that .project-confidential occupies
+ * on client cards, so every card opens the same way: a 16:9 preview, then
+ * the copy on plain card background.
+ */
 @media (max-width: 768px) {
   .project-gallery {
-    inset: 8px;
-    opacity: 0.5;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 1.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .project-gallery::after {
+    /* Keep a light veil so a bright screenshot does not out-shout the card. */
+    background: linear-gradient(180deg, rgba(14, 13, 12, 0) 0%, rgba(14, 13, 12, 0.35) 100%);
   }
 
   .project-card:hover .project-gallery {
-    opacity: 0.7;
-    transform: scale(1.02);
+    opacity: 1;
+    transform: none;
   }
 
   .project-preview-image,
   .project-card:hover .project-preview-image {
-    transform: scale(1.08);
+    transform: none;
+    transition: none;
   }
 }
 
