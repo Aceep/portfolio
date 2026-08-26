@@ -337,6 +337,8 @@
 
   .projects-grid {
     grid-template-columns: 1fr;
+    /* one column: no equal-height rows */
+    grid-auto-rows: auto;
     gap: 1.25rem;
   }
 

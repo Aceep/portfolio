@@ -43,20 +43,35 @@
   transform: scale(1.14) translateY(-8px);
 }
 
+/* Mobile: no hover, so the preview sits in flow above the copy */
 @media (max-width: 768px) {
   .project-gallery {
-    inset: 8px;
-    opacity: 0.5;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 1.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .project-gallery::after {
+    background: linear-gradient(180deg, rgba(14, 13, 12, 0) 0%, rgba(14, 13, 12, 0.35) 100%);
   }
 
   .project-card:hover .project-gallery {
-    opacity: 0.7;
-    transform: scale(1.02);
+    opacity: 1;
+    transform: none;
   }
 
   .project-preview-image,
   .project-card:hover .project-preview-image {
-    transform: scale(1.08);
+    transform: none;
+    transition: none;
   }
 }
 
